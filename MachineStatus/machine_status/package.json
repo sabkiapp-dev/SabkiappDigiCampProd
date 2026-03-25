@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ari-client": "^2.2.0"
+  }
+}
