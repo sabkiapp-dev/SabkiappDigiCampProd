@@ -1,0 +1,919 @@
+
+[22/Mar/2024 07:59:29] "GET /add_to_phone_dialer?api_key=3d2f4b8f9a1c7e6d&phone_number=9437089969&operator=08047358304 HTTP/1.1" 200 36
+[22/Mar/2024 07:59:49] "GET /add_to_phone_dialer?api_key=c3cq1f-b74e3e563fbbfe2c0bf14284d1fef026&phone_number=9861177954&operator=07941050653 HTTP/1.1" 200 36
+User ID: 10008487
+store_misscall_response :  True
+[22/Mar/2024 08:00:02] "GET /trigger_dialer?api_key=dklasjeiopduqw4iohjh480ehhcdjh3u8092 HTTP/1.1" 200 21
+user_ids :  10005055 and number of sims ready :  21
+get_phone_dilaer_list, time  2024-03-22 13:30:02.576981
+all phone_dialers ids selected dialer.id :  44814
+callthrough phone_dialer.id :  44814
+final_dial_list :  [{'host': 'host1', 'system_password': 'systemPass123', 'phone_number': '9437089969', 'port': 9, 'user_id': 10005055, 'campaign_id': 1000000001, 'name': None, 'name_spell': 0, 'dial_id': 44814}]
+user_ids :  10008487 and number of sims ready :  20
+get_phone_dilaer_list, time  2024-03-22 13:30:02.625439
+all phone_dialers ids selected dialer.id :  44810
+all phone_dialers ids selected dialer.id :  44813
+all phone_dialers ids selected dialer.id :  44815
+callthrough phone_dialer.id :  44810
+without callthrough phone_dialer.id :  44813
+without callthrough phone_dialer.id :  44815
+final_dial_list :  [{'host': 'host1', 'system_password': 'systemPass123', 'phone_number': '8144098034', 'port': 4, 'user_id': 10008487, 'campaign_id': 1000000003, 'name': None, 'name_spell': 0, 'dial_id': 44810}, {'host': 'host1', 'system_password': 'systemPass123', 'phone_number': '9971389164', 'port': 23, 'user_id': 10008487, 'campaign_id': 1000000003, 'name': '', 'name_spell': 0, 'dial_id': 44813}, {'host': 'host1', 'system_password': 'systemPass123', 'phone_number': '9861177954', 'port': 21, 'user_id': 10008487, 'campaign_id': 1000000003, 'name': '', 'name_spell': 0, 'dial_id': 44815}]
+host: host1, system_password: systemPass123, event : answered campaign_id: 1000000003, user_id :  10008487
+host: host1, system_password: systemPass123, event : answered campaign_id: 1000000003, user_id :  10008487
+[22/Mar/2024 08:00:15] "POST /send_call_status HTTP/1.1" 201 196
+[22/Mar/2024 08:00:15] "POST /send_call_status HTTP/1.1" 201 196
+host: host1, system_password: systemPass123, event : answered campaign_id: 1000000001, user_id :  10005055
+[22/Mar/2024 08:00:16] "POST /send_call_status HTTP/1.1" 201 195
+user_id=10008487, host=host1, system_password=systemPass123, message=3, phone_number=9971389164
+[22/Mar/2024 08:00:17] "POST /send_sms HTTP/1.1" 200 36
+user_id=10008487, host=host1, system_password=systemPass123, message=3, phone_number=9861177954
+[22/Mar/2024 08:00:17] "POST /send_sms HTTP/1.1" 200 36
+user_id=10005055, host=host1, system_password=systemPass123, message=1, phone_number=9437089969
+[22/Mar/2024 08:00:18] "POST /send_sms HTTP/1.1" 200 36
+active_hosts :  <QuerySet [<UserHosts: UserHosts(id=1, user_id=9937427611, host=host1, system_password=systemPass123)>, <UserHosts: UserHosts(id=2, user_id=7855817784, host=sonepur, system_password=aftersmsdjangoasteriskchmod)>, <UserHosts: UserHosts(id=3, user_id=7855817784, host=host1, system_password=systemPass123)>, <UserHosts: UserHosts(id=4, user_id=9937427611, host=sonepur, system_password=aftersmsdjangoasteriskchmod)>]>
+sms_dialers new2:  <QuerySet [<SmsDialer: SmsDialer object (799)>, <SmsDialer: SmsDialer object (800)>, <SmsDialer: SmsDialer object (801)>]>
+hello1
+hello2
+hello3
+sms_dialers here :  <QuerySet [<SmsDialer: SmsDialer object (799)>, <SmsDialer: SmsDialer object (800)>, <SmsDialer: SmsDialer object (801)>]>
+calling send_sms_internal
+sms_template_id :  3
+user has multiple hosts
+response :  <Response status_code=400, "text/html; charset=utf-8">
+hello
+An error occurred:  The response content must be rendered before it can be accessed.
+active_hosts :  <QuerySet []>
+host: host1, system_password: systemPass123, event : answered campaign_id: 1000000003, user_id :  10008487
+[22/Mar/2024 08:00:19] "POST /send_call_status HTTP/1.1" 201 195
+active_hosts :  <QuerySet []>
+user_id=10008487, host=host1, system_password=systemPass123, message=3, phone_number=8144098034
+[22/Mar/2024 08:00:20] "POST /send_sms HTTP/1.1" 200 36
+active_hosts :  <QuerySet [<UserHosts: UserHosts(id=2, user_id=7855817784, host=sonepur, system_password=aftersmsdjangoasteriskchmod)>, <UserHosts: UserHosts(id=3, user_id=7855817784, host=host1, system_password=systemPass123)>]>
+sms_dialers new2:  <QuerySet [<SmsDialer: SmsDialer object (802)>]>
+hello1
+hello2
+hello3
+sms_dialers here :  <QuerySet [<SmsDialer: SmsDialer object (802)>]>
+calling send_sms_internal
+sms_template_id :  3
+user has multiple hosts
+response :  <Response status_code=400, "text/html; charset=utf-8">
+hello
+An error occurred:  The response content must be rendered before it can be accessed.
+Not Found: /filemanager/dialog.php
+[22/Mar/2024 08:00:25] "GET /filemanager/dialog.php HTTP/1.1" 404 15175
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+[22/Mar/2024 08:00:26] "POST /send_call_status HTTP/1.1" 201 30
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:26] "POST /send_call_status HTTP/1.1" 400 28
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:26] "POST /send_call_status HTTP/1.1" 400 28
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:26] "POST /send_call_status HTTP/1.1" 400 28
+user_ids :  10005055 and number of sims ready :  17
+get_phone_dilaer_list, time  2024-03-22 13:30:26.722250
+final_dial_list :  []
+user_ids :  10008487 and number of sims ready :  17
+get_phone_dilaer_list, time  2024-03-22 13:30:26.735294
+final_dial_list :  []
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+[22/Mar/2024 08:00:27] "POST /send_call_status HTTP/1.1" 201 30
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:27] "POST /send_call_status HTTP/1.1" 400 28
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:27] "POST /send_call_status HTTP/1.1" 400 28
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:27] "POST /send_call_status HTTP/1.1" 400 28
+[22/Mar/2024 08:00:27] "GET /admin/filemanager/dialog.php HTTP/1.1" 302 0
+[22/Mar/2024 08:00:29] "GET /admin/login/?next=/admin/filemanager/dialog.php HTTP/1.1" 200 4206
+Not Found: /js/filemanager/dialog.php
+[22/Mar/2024 08:00:30] "GET /js/filemanager/dialog.php HTTP/1.1" 404 15184
+user_ids :  10005055 and number of sims ready :  17
+get_phone_dilaer_list, time  2024-03-22 13:30:32.352393
+Not Found: /assets/administrator/filemanager/dialog.php
+[22/Mar/2024 08:00:32] "GET /assets/administrator/filemanager/dialog.php HTTP/1.1" 404 15238
+final_dial_list :  []
+user_ids :  10008487 and number of sims ready :  17
+get_phone_dilaer_list, time  2024-03-22 13:30:32.380936
+final_dial_list :  []
+Not Found: /assets/admin/js/filemanager/dialog.php
+[22/Mar/2024 08:00:35] "GET /assets/admin/js/filemanager/dialog.php HTTP/1.1" 404 15223
+Not Found: /assets/plugins/filemanager/dialog.php
+[22/Mar/2024 08:00:37] "GET /assets/plugins/filemanager/dialog.php HTTP/1.1" 404 15220
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000001, user_id :  10005055
+[22/Mar/2024 08:00:38] "POST /send_call_status HTTP/1.1" 201 30
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000001, user_id :  10005055
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:38] "POST /send_call_status HTTP/1.1" 400 28
+user_ids :  10005055 and number of sims ready :  17
+get_phone_dilaer_list, time  2024-03-22 13:30:38.387581
+final_dial_list :  []
+user_ids :  10008487 and number of sims ready :  17
+get_phone_dilaer_list, time  2024-03-22 13:30:38.402973
+final_dial_list :  []
+Not Found: /assets/filemanager/dialog.php
+[22/Mar/2024 08:00:38] "GET /assets/filemanager/dialog.php HTTP/1.1" 404 15196
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+[22/Mar/2024 08:00:46] "POST /send_call_status HTTP/1.1" 201 30
+host: host1, system_password: systemPass123, event : completed campaign_id: 1000000003, user_id :  10008487
+Bad Request: /send_call_status
+[22/Mar/2024 08:00:46] "POST /send_call_status HTTP/1.1" 400 28
+user_ids :  10005055 and number of sims ready :  18
+get_phone_dilaer_list, time  2024-03-22 13:30:47.209889
+final_dial_list :  []
+user_ids :  10008487 and number of sims ready :  18
+get_phone_dilaer_list, time  2024-03-22 13:30:47.301549
+final_dial_list :  []
+[22/Mar/2024 08:01:01] "GET /trigger_dialer?api_key=dklasjeiopduqw4iohjh480ehhcdjh3u8092 HTTP/1.1" 200 21
+user_ids :  10005055 and number of sims ready :  18
+get_phone_dilaer_list, time  2024-03-22 13:31:01.484319
+final_dial_list :  []
+user_ids :  10008487 and number of sims ready :  18
+get_phone_dilaer_list, time  2024-03-22 13:31:01.496490
+final_dial_list :  []
+
+
+
+
+
+????????????????????????????????????????????????????????????????????????????
+????????????????????????????????????????????????????????????????????????????
+????????????????????????????????????????????????????????????????????????????
+stack
+    -- Called 99713891641028100084871000000003@basic-context
+    -- Executing [99713891641028100084871000000003@basic-context:1] Verbose("Local/99713891641028100084871000000003@basic-context-000003ea;2", "1, "User dialed 99713891641028100084871000000003"") in new stack
+  "User dialed 99713891641028100084871000000003"
+    -- Executing [99713891641028100084871000000003@basic-context:2] Set("Local/99713891641028100084871000000003@basic-context-000003ea;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:3] Set("Local/99713891641028100084871000000003@basic-context-000003ea;2", "CALLERID_NUM=1028") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:4] Set("Local/99713891641028100084871000000003@basic-context-000003ea;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:5] Set("Local/99713891641028100084871000000003@basic-context-000003ea;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:6] Set("Local/99713891641028100084871000000003@basic-context-000003ea;2", "CALLERID(num)=1028") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:7] Dial("Local/99713891641028100084871000000003@basic-context-000003ea;2", "PJSIP/9971389164@1028,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1028
+    -- No one is available to answer at this time (1:0/0/0)
+    -- Executing [99713891641028100084871000000003@basic-context:8] System("Local/99713891641028100084871000000003@basic-context-000003ea;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1028 10008487 1000000003 NOANSWER &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641028100084871000000003@basic-context-000003ea;2' status is 'NOANSWER'
+    -- Called 99713891641028100084871000000003@basic-context
+    -- Executing [99713891641028100084871000000003@basic-context:1] Verbose("Local/99713891641028100084871000000003@basic-context-000003eb;2", "1, "User dialed 99713891641028100084871000000003"") in new stack
+  "User dialed 99713891641028100084871000000003"
+    -- Executing [99713891641028100084871000000003@basic-context:2] Set("Local/99713891641028100084871000000003@basic-context-000003eb;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:3] Set("Local/99713891641028100084871000000003@basic-context-000003eb;2", "CALLERID_NUM=1028") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:4] Set("Local/99713891641028100084871000000003@basic-context-000003eb;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:5] Set("Local/99713891641028100084871000000003@basic-context-000003eb;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:6] Set("Local/99713891641028100084871000000003@basic-context-000003eb;2", "CALLERID(num)=1028") in new stack
+    -- Executing [99713891641028100084871000000003@basic-context:7] Dial("Local/99713891641028100084871000000003@basic-context-000003eb;2", "PJSIP/9971389164@1028,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1028
+    -- No one is available to answer at this time (1:0/0/0)
+    -- Executing [99713891641028100084871000000003@basic-context:8] System("Local/99713891641028100084871000000003@basic-context-000003eb;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1028 10008487 1000000003 NOANSWER &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641028100084871000000003@basic-context-000003eb;2' status is 'NOANSWER'
+    -- Called 89843987071028100050551000000001@basic-context
+    -- Executing [89843987071028100050551000000001@basic-context:1] Verbose("Local/89843987071028100050551000000001@basic-context-000003ec;2", "1, "User dialed 89843987071028100050551000000001"") in new stack
+  "User dialed 89843987071028100050551000000001"
+    -- Executing [89843987071028100050551000000001@basic-context:2] Set("Local/89843987071028100050551000000001@basic-context-000003ec;2", "PHONE=8984398707") in new stack
+    -- Executing [89843987071028100050551000000001@basic-context:3] Set("Local/89843987071028100050551000000001@basic-context-000003ec;2", "CALLERID_NUM=1028") in new stack
+    -- Executing [89843987071028100050551000000001@basic-context:4] Set("Local/89843987071028100050551000000001@basic-context-000003ec;2", "USER_ID=10005055") in new stack
+    -- Executing [89843987071028100050551000000001@basic-context:5] Set("Local/89843987071028100050551000000001@basic-context-000003ec;2", "DIALPLAN=1000000001") in new stack
+    -- Executing [89843987071028100050551000000001@basic-context:6] Set("Local/89843987071028100050551000000001@basic-context-000003ec;2", "CALLERID(num)=1028") in new stack
+    -- Executing [89843987071028100050551000000001@basic-context:7] Dial("Local/89843987071028100050551000000001@basic-context-000003ec;2", "PJSIP/8984398707@1028,30,U(1000000001)") in new stack
+    -- Called PJSIP/8984398707@1028
+    -- Called 99383278041007100084871000000003@basic-context
+    -- Executing [99383278041007100084871000000003@basic-context:1] Verbose("Local/99383278041007100084871000000003@basic-context-000003ed;2", "1, "User dialed 99383278041007100084871000000003"") in new stack
+  "User dialed 99383278041007100084871000000003"
+    -- Executing [99383278041007100084871000000003@basic-context:2] Set("Local/99383278041007100084871000000003@basic-context-000003ed;2", "PHONE=9938327804") in new stack
+    -- Executing [99383278041007100084871000000003@basic-context:3] Set("Local/99383278041007100084871000000003@basic-context-000003ed;2", "CALLERID_NUM=1007") in new stack
+    -- Executing [99383278041007100084871000000003@basic-context:4] Set("Local/99383278041007100084871000000003@basic-context-000003ed;2", "USER_ID=10008487") in new stack
+    -- Executing [99383278041007100084871000000003@basic-context:5] Set("Local/99383278041007100084871000000003@basic-context-000003ed;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99383278041007100084871000000003@basic-context:6] Set("Local/99383278041007100084871000000003@basic-context-000003ed;2", "CALLERID(num)=1007") in new stack
+    -- Executing [99383278041007100084871000000003@basic-context:7] Dial("Local/99383278041007100084871000000003@basic-context-000003ed;2", "PJSIP/9938327804@1007,30,U(1000000003)") in new stack
+    -- Called PJSIP/9938327804@1007
+       > 0xffff4c08bec0 -- Strict RTP learning after remote address set to: 192.168.1.50:19664
+    -- PJSIP/1007-000003ed is making progress passing it to Local/99383278041007100084871000000003@basic-context-000003ed;2
+    -- Local/99383278041007100084871000000003@basic-context-000003ed;1 is making progress
+    -- No one is available to answer at this time (1:0/0/0)
+    -- Executing [89843987071028100050551000000001@basic-context:8] System("Local/89843987071028100050551000000001@basic-context-000003ec;2", "/etc/asterisk/dtmf.sh not_answered 8984398707 1028 10005055 1000000001 NOANSWER &") in new stack
+    -- Auto fallthrough, channel 'Local/89843987071028100050551000000001@basic-context-000003ec;2' status is 'NOANSWER'
+       > 0xffff4c08bec0 -- Strict RTP switching to RTP target address 192.168.1.50:19664 as source
+       > 0xffff4c08bec0 -- Strict RTP learning complete - Locking on source address 192.168.1.50:19664
+    -- PJSIP/1007-000003ed answered Local/99383278041007100084871000000003@basic-context-000003ed;2
+    -- PJSIP/1007-000003ed Internal Gosub(1000000003,s,1) start
+    -- Executing [s@1000000003:1] Verbose("PJSIP/1007-000003ed", "1, "Call is answered" ") in new stack
+  "Call is answered" 
+    -- Executing [s@1000000003:2] Set("PJSIP/1007-000003ed", "PHONE=9938327804") in new stack
+    -- Executing [s@1000000003:3] Set("PJSIP/1007-000003ed", "CALLERID_NUM=1007") in new stack
+    -- Executing [s@1000000003:4] Set("PJSIP/1007-000003ed", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003:5] Set("PJSIP/1007-000003ed", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003:6] Set("PJSIP/1007-000003ed", "TIMEOUT(absolute)=600") in new stack
+    -- Channel will hangup at 2024-03-22 17:47:15.476 IST.
+    -- Executing [s@1000000003:7] System("PJSIP/1007-000003ed", "/etc/asterisk/dtmf.sh answered 9938327804 1007 10008487 1000000003 &") in new stack
+    -- Executing [s@1000000003:8] Goto("PJSIP/1007-000003ed", "1000000003-1,s,1") in new stack
+    -- Goto (1000000003-1,s,1)
+    -- Executing [s@1000000003-1:1] Verbose("PJSIP/1007-000003ed", "1, "Started Extension 1 of campaign 1000000003"") in new stack
+  "Started Extension 1 of campaign 1000000003"
+    -- Executing [s@1000000003-1:2] Set("PJSIP/1007-000003ed", "PHONE=9938327804") in new stack
+    -- Executing [s@1000000003-1:3] Set("PJSIP/1007-000003ed", "CALLERID_NUM=1007") in new stack
+    -- Executing [s@1000000003-1:4] Set("PJSIP/1007-000003ed", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003-1:5] Set("PJSIP/1007-000003ed", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003-1:6] Set("PJSIP/1007-000003ed", "current_extension=1") in new stack
+    -- Executing [s@1000000003-1:7] Playback("PJSIP/1007-000003ed", "initial_wait") in new stack
+    -- <PJSIP/1007-000003ed> Playing 'initial_wait.slin' (language 'en')
+    -- Executing [s@1000000003-1:8] System("PJSIP/1007-000003ed", "/etc/asterisk/dtmf.sh send_sms 9938327804 1007 10008487 1000000003 3 &") in new stack
+    -- Executing [s@1000000003-1:9] Playback("PJSIP/1007-000003ed", "14") in new stack
+    -- <PJSIP/1007-000003ed> Playing '14.slin16' (language 'en')
+    -- Executing [s@1000000003-1:10] Verbose("PJSIP/1007-000003ed", "1, "Option Voice not available"") in new stack
+  "Option Voice not available"
+    -- Executing [s@1000000003-1:11] System("PJSIP/1007-000003ed", "/etc/asterisk/dtmf.sh completed 9938327804 1007 10008487 1000000003 &") in new stack
+    -- Executing [s@1000000003-1:12] Hangup("PJSIP/1007-000003ed", "") in new stack
+  == Spawn extension (1000000003-1, s, 12) exited non-zero on 'PJSIP/1007-000003ed'
+[Mar 22 17:37:46] WARNING[69230][C-00000422]: app_stack.c:1079 gosub_run: PJSIP/1007-000003ed Abnormal 'Gosub(1000000003,s,1)' exit.  Popping routine return locations.
+  == Spawn extension (basic-context, 99383278041007100084871000000003, 7) exited non-zero on 'Local/99383278041007100084871000000003@basic-context-000003ed;2'
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003ee;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-000003ee;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-000003ee;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-000003ee;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-000003ee;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-000003ee;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-000003ee;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641029100084871000000003@basic-context:8] System("Local/99713891641029100084871000000003@basic-context-000003ee;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1029 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641029100084871000000003@basic-context-000003ee;2' status is 'CONGESTION'
+    -- Local/99713891641029100084871000000003@basic-context-000003ee;1 is circuit-busy
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003ef;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-000003ef;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-000003ef;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-000003ef;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-000003ef;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-000003ef;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-000003ef;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641029100084871000000003@basic-context:8] System("Local/99713891641029100084871000000003@basic-context-000003ef;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1029 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641029100084871000000003@basic-context-000003ef;2' status is 'CONGESTION'
+    -- Local/99713891641029100084871000000003@basic-context-000003ef;1 is circuit-busy
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003f0;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-000003f0;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-000003f0;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-000003f0;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-000003f0;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-000003f0;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-000003f0;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641029100084871000000003@basic-context:8] System("Local/99713891641029100084871000000003@basic-context-000003f0;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1029 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641029100084871000000003@basic-context-000003f0;2' status is 'CONGESTION'
+    -- Local/99713891641029100084871000000003@basic-context-000003f0;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641030100084871000000003@basic-context extension h
+    -- Called 99713891641030100084871000000003@basic-context
+    -- Executing [99713891641030100084871000000003@basic-context:1] Verbose("Local/99713891641030100084871000000003@basic-context-000003f1;2", "1, "User dialed 99713891641030100084871000000003"") in new stack
+  "User dialed 99713891641030100084871000000003"
+    -- Executing [99713891641030100084871000000003@basic-context:2] Set("Local/99713891641030100084871000000003@basic-context-000003f1;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641030100084871000000003@basic-context:3] Set("Local/99713891641030100084871000000003@basic-context-000003f1;2", "CALLERID_NUM=1030") in new stack
+    -- Executing [99713891641030100084871000000003@basic-context:4] Set("Local/99713891641030100084871000000003@basic-context-000003f1;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641030100084871000000003@basic-context:5] Set("Local/99713891641030100084871000000003@basic-context-000003f1;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641030100084871000000003@basic-context:6] Set("Local/99713891641030100084871000000003@basic-context-000003f1;2", "CALLERID(num)=1030") in new stack
+    -- Executing [99713891641030100084871000000003@basic-context:7] Dial("Local/99713891641030100084871000000003@basic-context-000003f1;2", "PJSIP/9971389164@1030,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1030
+       > 0xffff4c08bec0 -- Strict RTP learning after remote address set to: 192.168.1.50:11120
+    -- PJSIP/1030-000003f1 is making progress passing it to Local/99713891641030100084871000000003@basic-context-000003f1;2
+    -- Local/99713891641030100084871000000003@basic-context-000003f1;1 is making progress
+       > 0xffff4c08bec0 -- Strict RTP switching to RTP target address 192.168.1.50:11120 as source
+       > 0xffff4c08bec0 -- Strict RTP learning complete - Locking on source address 192.168.1.50:11120
+    -- PJSIP/1030-000003f1 answered Local/99713891641030100084871000000003@basic-context-000003f1;2
+    -- PJSIP/1030-000003f1 Internal Gosub(1000000003,s,1) start
+    -- Executing [s@1000000003:1] Verbose("PJSIP/1030-000003f1", "1, "Call is answered" ") in new stack
+  "Call is answered" 
+    -- Executing [s@1000000003:2] Set("PJSIP/1030-000003f1", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003:3] Set("PJSIP/1030-000003f1", "CALLERID_NUM=1030") in new stack
+    -- Executing [s@1000000003:4] Set("PJSIP/1030-000003f1", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003:5] Set("PJSIP/1030-000003f1", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003:6] Set("PJSIP/1030-000003f1", "TIMEOUT(absolute)=600") in new stack
+    -- Channel will hangup at 2024-03-22 17:59:41.585 IST.
+    -- Executing [s@1000000003:7] System("PJSIP/1030-000003f1", "/etc/asterisk/dtmf.sh answered 9971389164 1030 10008487 1000000003 &") in new stack
+    -- Executing [s@1000000003:8] Goto("PJSIP/1030-000003f1", "1000000003-1,s,1") in new stack
+    -- Goto (1000000003-1,s,1)
+    -- Executing [s@1000000003-1:1] Verbose("PJSIP/1030-000003f1", "1, "Started Extension 1 of campaign 1000000003"") in new stack
+  "Started Extension 1 of campaign 1000000003"
+    -- Executing [s@1000000003-1:2] Set("PJSIP/1030-000003f1", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003-1:3] Set("PJSIP/1030-000003f1", "CALLERID_NUM=1030") in new stack
+    -- Executing [s@1000000003-1:4] Set("PJSIP/1030-000003f1", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003-1:5] Set("PJSIP/1030-000003f1", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003-1:6] Set("PJSIP/1030-000003f1", "current_extension=1") in new stack
+    -- Executing [s@1000000003-1:7] Playback("PJSIP/1030-000003f1", "initial_wait") in new stack
+    -- <PJSIP/1030-000003f1> Playing 'initial_wait.slin' (language 'en')
+    -- Executing [s@1000000003-1:8] System("PJSIP/1030-000003f1", "/etc/asterisk/dtmf.sh send_sms 9971389164 1030 10008487 1000000003 3 &") in new stack
+    -- Executing [s@1000000003-1:9] Playback("PJSIP/1030-000003f1", "14") in new stack
+    -- <PJSIP/1030-000003f1> Playing '14.slin16' (language 'en')
+  == Spawn extension (1000000003-1, s, 9) exited non-zero on 'PJSIP/1030-000003f1'
+[Mar 22 17:49:47] WARNING[69775][C-00000426]: app_stack.c:1079 gosub_run: PJSIP/1030-000003f1 Abnormal 'Gosub(1000000003,s,1)' exit.  Popping routine return locations.
+    -- Local/99713891641030100084871000000003@basic-context-000003f1;1 answered
+    -- Executing [h@default:1] Verbose("Local/99713891641030100084871000000003@basic-context-000003f1;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "CALLERID_NUM=1030") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641030100084871000000003@basic-context-000003f1;1", "/etc/asterisk/dtmf.sh completed 9971389164 1030 10008487 1000000003 &") in new stack
+    -- Channel PJSIP/1030-000003f1 joined 'simple_bridge' basic-bridge <97249a31-0dec-4446-beac-aab9bc2931b6>
+    -- Channel Local/99713891641030100084871000000003@basic-context-000003f1;2 joined 'simple_bridge' basic-bridge <97249a31-0dec-4446-beac-aab9bc2931b6>
+    -- Channel PJSIP/1030-000003f1 left 'simple_bridge' basic-bridge <97249a31-0dec-4446-beac-aab9bc2931b6>
+    -- Channel Local/99713891641030100084871000000003@basic-context-000003f1;2 left 'simple_bridge' basic-bridge <97249a31-0dec-4446-beac-aab9bc2931b6>
+  == Spawn extension (basic-context, 99713891641030100084871000000003, 7) exited non-zero on 'Local/99713891641030100084871000000003@basic-context-000003f1;2'
+    -- Executing [h@default:1] Verbose("Local/99713891641030100084871000000003@basic-context-000003f1;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "CALLERID_NUM=1030") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641030100084871000000003@basic-context-000003f1;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641030100084871000000003@basic-context-000003f1;1", "/etc/asterisk/dtmf.sh completed 9971389164 1030 10008487 1000000003 &") in new stack
+pi*CLI> channel originate Local/99713891641031100084871000000003@basic-context extension h
+    -- Called 99713891641031100084871000000003@basic-context
+    -- Executing [99713891641031100084871000000003@basic-context:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f2;2", "1, "User dialed 99713891641031100084871000000003"") in new stack
+  "User dialed 99713891641031100084871000000003"
+    -- Executing [99713891641031100084871000000003@basic-context:2] Set("Local/99713891641031100084871000000003@basic-context-000003f2;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:3] Set("Local/99713891641031100084871000000003@basic-context-000003f2;2", "CALLERID_NUM=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:4] Set("Local/99713891641031100084871000000003@basic-context-000003f2;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:5] Set("Local/99713891641031100084871000000003@basic-context-000003f2;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:6] Set("Local/99713891641031100084871000000003@basic-context-000003f2;2", "CALLERID(num)=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:7] Dial("Local/99713891641031100084871000000003@basic-context-000003f2;2", "PJSIP/9971389164@1031,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1031
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641031100084871000000003@basic-context:8] System("Local/99713891641031100084871000000003@basic-context-000003f2;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1031 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641031100084871000000003@basic-context-000003f2;2' status is 'CONGESTION'
+    -- Local/99713891641031100084871000000003@basic-context-000003f2;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641031100084871000000003@basic-context extension h
+    -- Called 99713891641031100084871000000003@basic-context
+    -- Executing [99713891641031100084871000000003@basic-context:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f3;2", "1, "User dialed 99713891641031100084871000000003"") in new stack
+  "User dialed 99713891641031100084871000000003"
+    -- Executing [99713891641031100084871000000003@basic-context:2] Set("Local/99713891641031100084871000000003@basic-context-000003f3;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:3] Set("Local/99713891641031100084871000000003@basic-context-000003f3;2", "CALLERID_NUM=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:4] Set("Local/99713891641031100084871000000003@basic-context-000003f3;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:5] Set("Local/99713891641031100084871000000003@basic-context-000003f3;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:6] Set("Local/99713891641031100084871000000003@basic-context-000003f3;2", "CALLERID(num)=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:7] Dial("Local/99713891641031100084871000000003@basic-context-000003f3;2", "PJSIP/9971389164@1031,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1031
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641031100084871000000003@basic-context:8] System("Local/99713891641031100084871000000003@basic-context-000003f3;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1031 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641031100084871000000003@basic-context-000003f3;2' status is 'CONGESTION'
+    -- Local/99713891641031100084871000000003@basic-context-000003f3;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641031100084871000000003@basic-context extension h
+    -- Called 99713891641031100084871000000003@basic-context
+    -- Executing [99713891641031100084871000000003@basic-context:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f4;2", "1, "User dialed 99713891641031100084871000000003"") in new stack
+  "User dialed 99713891641031100084871000000003"
+    -- Executing [99713891641031100084871000000003@basic-context:2] Set("Local/99713891641031100084871000000003@basic-context-000003f4;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:3] Set("Local/99713891641031100084871000000003@basic-context-000003f4;2", "CALLERID_NUM=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:4] Set("Local/99713891641031100084871000000003@basic-context-000003f4;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:5] Set("Local/99713891641031100084871000000003@basic-context-000003f4;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:6] Set("Local/99713891641031100084871000000003@basic-context-000003f4;2", "CALLERID(num)=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:7] Dial("Local/99713891641031100084871000000003@basic-context-000003f4;2", "PJSIP/9971389164@1031,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1031
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641031100084871000000003@basic-context:8] System("Local/99713891641031100084871000000003@basic-context-000003f4;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1031 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641031100084871000000003@basic-context-000003f4;2' status is 'CONGESTION'
+    -- Local/99713891641031100084871000000003@basic-context-000003f4;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641031100084871000000003@basic-context extension h
+    -- Called 99713891641031100084871000000003@basic-context
+    -- Executing [99713891641031100084871000000003@basic-context:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f5;2", "1, "User dialed 99713891641031100084871000000003"") in new stack
+  "User dialed 99713891641031100084871000000003"
+    -- Executing [99713891641031100084871000000003@basic-context:2] Set("Local/99713891641031100084871000000003@basic-context-000003f5;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:3] Set("Local/99713891641031100084871000000003@basic-context-000003f5;2", "CALLERID_NUM=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:4] Set("Local/99713891641031100084871000000003@basic-context-000003f5;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:5] Set("Local/99713891641031100084871000000003@basic-context-000003f5;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:6] Set("Local/99713891641031100084871000000003@basic-context-000003f5;2", "CALLERID(num)=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:7] Dial("Local/99713891641031100084871000000003@basic-context-000003f5;2", "PJSIP/9971389164@1031,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1031
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641031100084871000000003@basic-context:8] System("Local/99713891641031100084871000000003@basic-context-000003f5;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1031 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641031100084871000000003@basic-context-000003f5;2' status is 'CONGESTION'
+    -- Local/99713891641031100084871000000003@basic-context-000003f5;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641031100084871000000003@basic-context extension h
+    -- Called 99713891641031100084871000000003@basic-context
+    -- Executing [99713891641031100084871000000003@basic-context:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f6;2", "1, "User dialed 99713891641031100084871000000003"") in new stack
+  "User dialed 99713891641031100084871000000003"
+    -- Executing [99713891641031100084871000000003@basic-context:2] Set("Local/99713891641031100084871000000003@basic-context-000003f6;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:3] Set("Local/99713891641031100084871000000003@basic-context-000003f6;2", "CALLERID_NUM=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:4] Set("Local/99713891641031100084871000000003@basic-context-000003f6;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:5] Set("Local/99713891641031100084871000000003@basic-context-000003f6;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:6] Set("Local/99713891641031100084871000000003@basic-context-000003f6;2", "CALLERID(num)=1031") in new stack
+    -- Executing [99713891641031100084871000000003@basic-context:7] Dial("Local/99713891641031100084871000000003@basic-context-000003f6;2", "PJSIP/9971389164@1031,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1031
+       > 0xffff8031c190 -- Strict RTP learning after remote address set to: 192.168.1.50:14674
+    -- PJSIP/1031-000003f6 is making progress passing it to Local/99713891641031100084871000000003@basic-context-000003f6;2
+    -- Local/99713891641031100084871000000003@basic-context-000003f6;1 is making progress
+       > 0xffff8031c190 -- Strict RTP switching to RTP target address 192.168.1.50:14674 as source
+       > 0xffff8031c190 -- Strict RTP learning complete - Locking on source address 192.168.1.50:14674
+    -- PJSIP/1031-000003f6 answered Local/99713891641031100084871000000003@basic-context-000003f6;2
+    -- PJSIP/1031-000003f6 Internal Gosub(1000000003,s,1) start
+    -- Executing [s@1000000003:1] Verbose("PJSIP/1031-000003f6", "1, "Call is answered" ") in new stack
+  "Call is answered" 
+    -- Executing [s@1000000003:2] Set("PJSIP/1031-000003f6", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003:3] Set("PJSIP/1031-000003f6", "CALLERID_NUM=1031") in new stack
+    -- Executing [s@1000000003:4] Set("PJSIP/1031-000003f6", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003:5] Set("PJSIP/1031-000003f6", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003:6] Set("PJSIP/1031-000003f6", "TIMEOUT(absolute)=600") in new stack
+    -- Channel will hangup at 2024-03-22 18:00:58.674 IST.
+    -- Executing [s@1000000003:7] System("PJSIP/1031-000003f6", "/etc/asterisk/dtmf.sh answered 9971389164 1031 10008487 1000000003 &") in new stack
+    -- Executing [s@1000000003:8] Goto("PJSIP/1031-000003f6", "1000000003-1,s,1") in new stack
+    -- Goto (1000000003-1,s,1)
+    -- Executing [s@1000000003-1:1] Verbose("PJSIP/1031-000003f6", "1, "Started Extension 1 of campaign 1000000003"") in new stack
+  "Started Extension 1 of campaign 1000000003"
+    -- Executing [s@1000000003-1:2] Set("PJSIP/1031-000003f6", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003-1:3] Set("PJSIP/1031-000003f6", "CALLERID_NUM=1031") in new stack
+    -- Executing [s@1000000003-1:4] Set("PJSIP/1031-000003f6", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003-1:5] Set("PJSIP/1031-000003f6", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003-1:6] Set("PJSIP/1031-000003f6", "current_extension=1") in new stack
+    -- Executing [s@1000000003-1:7] Playback("PJSIP/1031-000003f6", "initial_wait") in new stack
+    -- <PJSIP/1031-000003f6> Playing 'initial_wait.slin' (language 'en')
+    -- Executing [s@1000000003-1:8] System("PJSIP/1031-000003f6", "/etc/asterisk/dtmf.sh send_sms 9971389164 1031 10008487 1000000003 3 &") in new stack
+    -- Executing [s@1000000003-1:9] Playback("PJSIP/1031-000003f6", "14") in new stack
+    -- <PJSIP/1031-000003f6> Playing '14.slin16' (language 'en')
+  == Spawn extension (1000000003-1, s, 9) exited non-zero on 'PJSIP/1031-000003f6'
+[Mar 22 17:51:02] WARNING[70183][C-0000042c]: app_stack.c:1079 gosub_run: PJSIP/1031-000003f6 Abnormal 'Gosub(1000000003,s,1)' exit.  Popping routine return locations.
+    -- Local/99713891641031100084871000000003@basic-context-000003f6;1 answered
+    -- Executing [h@default:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f6;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "CALLERID_NUM=1031") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641031100084871000000003@basic-context-000003f6;1", "/etc/asterisk/dtmf.sh completed 9971389164 1031 10008487 1000000003 &") in new stack
+    -- Channel PJSIP/1031-000003f6 joined 'simple_bridge' basic-bridge <26d683d7-b7ed-4541-8b91-7a971fba019e>
+    -- Channel Local/99713891641031100084871000000003@basic-context-000003f6;2 joined 'simple_bridge' basic-bridge <26d683d7-b7ed-4541-8b91-7a971fba019e>
+    -- Channel PJSIP/1031-000003f6 left 'simple_bridge' basic-bridge <26d683d7-b7ed-4541-8b91-7a971fba019e>
+    -- Channel Local/99713891641031100084871000000003@basic-context-000003f6;2 left 'simple_bridge' basic-bridge <26d683d7-b7ed-4541-8b91-7a971fba019e>
+  == Spawn extension (basic-context, 99713891641031100084871000000003, 7) exited non-zero on 'Local/99713891641031100084871000000003@basic-context-000003f6;2'
+    -- Executing [h@default:1] Verbose("Local/99713891641031100084871000000003@basic-context-000003f6;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "CALLERID_NUM=1031") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641031100084871000000003@basic-context-000003f6;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641031100084871000000003@basic-context-000003f6;1", "/etc/asterisk/dtmf.sh completed 9971389164 1031 10008487 1000000003 &") in new stack
+pi*CLI> channel originate Local/99713891641029100084871000000003@basic-context extension h
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003f7;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-000003f7;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-000003f7;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-000003f7;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-000003f7;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-000003f7;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-000003f7;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641029100084871000000003@basic-context:8] System("Local/99713891641029100084871000000003@basic-context-000003f7;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1029 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641029100084871000000003@basic-context-000003f7;2' status is 'CONGESTION'
+    -- Local/99713891641029100084871000000003@basic-context-000003f7;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641029100084871000000003@basic-context extension h
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003f8;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-000003f8;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-000003f8;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-000003f8;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-000003f8;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-000003f8;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-000003f8;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641029100084871000000003@basic-context:8] System("Local/99713891641029100084871000000003@basic-context-000003f8;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1029 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641029100084871000000003@basic-context-000003f8;2' status is 'CONGESTION'
+    -- Local/99713891641029100084871000000003@basic-context-000003f8;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641029100084871000000003@basic-context extension h
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003f9;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-000003f9;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-000003f9;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-000003f9;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-000003f9;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-000003f9;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-000003f9;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+       > 0xffff4c08bec0 -- Strict RTP learning after remote address set to: 192.168.1.50:14860
+    -- PJSIP/1029-000003f9 is making progress passing it to Local/99713891641029100084871000000003@basic-context-000003f9;2
+    -- Local/99713891641029100084871000000003@basic-context-000003f9;1 is making progress
+       > 0xffff4c08bec0 -- Strict RTP switching to RTP target address 192.168.1.50:14860 as source
+       > 0xffff4c08bec0 -- Strict RTP learning complete - Locking on source address 192.168.1.50:14860
+    -- PJSIP/1029-000003f9 answered Local/99713891641029100084871000000003@basic-context-000003f9;2
+    -- PJSIP/1029-000003f9 Internal Gosub(1000000003,s,1) start
+    -- Executing [s@1000000003:1] Verbose("PJSIP/1029-000003f9", "1, "Call is answered" ") in new stack
+  "Call is answered" 
+    -- Executing [s@1000000003:2] Set("PJSIP/1029-000003f9", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003:3] Set("PJSIP/1029-000003f9", "CALLERID_NUM=1029") in new stack
+    -- Executing [s@1000000003:4] Set("PJSIP/1029-000003f9", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003:5] Set("PJSIP/1029-000003f9", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003:6] Set("PJSIP/1029-000003f9", "TIMEOUT(absolute)=600") in new stack
+    -- Channel will hangup at 2024-03-22 18:01:45.581 IST.
+    -- Executing [s@1000000003:7] System("PJSIP/1029-000003f9", "/etc/asterisk/dtmf.sh answered 9971389164 1029 10008487 1000000003 &") in new stack
+    -- Executing [s@1000000003:8] Goto("PJSIP/1029-000003f9", "1000000003-1,s,1") in new stack
+    -- Goto (1000000003-1,s,1)
+    -- Executing [s@1000000003-1:1] Verbose("PJSIP/1029-000003f9", "1, "Started Extension 1 of campaign 1000000003"") in new stack
+  "Started Extension 1 of campaign 1000000003"
+    -- Executing [s@1000000003-1:2] Set("PJSIP/1029-000003f9", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003-1:3] Set("PJSIP/1029-000003f9", "CALLERID_NUM=1029") in new stack
+    -- Executing [s@1000000003-1:4] Set("PJSIP/1029-000003f9", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003-1:5] Set("PJSIP/1029-000003f9", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003-1:6] Set("PJSIP/1029-000003f9", "current_extension=1") in new stack
+    -- Executing [s@1000000003-1:7] Playback("PJSIP/1029-000003f9", "initial_wait") in new stack
+    -- <PJSIP/1029-000003f9> Playing 'initial_wait.slin' (language 'en')
+    -- Executing [s@1000000003-1:8] System("PJSIP/1029-000003f9", "/etc/asterisk/dtmf.sh send_sms 9971389164 1029 10008487 1000000003 3 &") in new stack
+    -- Executing [s@1000000003-1:9] Playback("PJSIP/1029-000003f9", "14") in new stack
+    -- <PJSIP/1029-000003f9> Playing '14.slin16' (language 'en')
+  == Spawn extension (1000000003-1, s, 9) exited non-zero on 'PJSIP/1029-000003f9'
+[Mar 22 17:51:47] WARNING[70459][C-00000430]: app_stack.c:1079 gosub_run: PJSIP/1029-000003f9 Abnormal 'Gosub(1000000003,s,1)' exit.  Popping routine return locations.
+    -- Local/99713891641029100084871000000003@basic-context-000003f9;1 answered
+    -- Executing [h@default:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003f9;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "CALLERID_NUM=1029") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641029100084871000000003@basic-context-000003f9;1", "/etc/asterisk/dtmf.sh completed 9971389164 1029 10008487 1000000003 &") in new stack
+    -- Channel PJSIP/1029-000003f9 joined 'simple_bridge' basic-bridge <7cd9bcce-a017-46e2-b4ac-2346a86ac565>
+    -- Channel Local/99713891641029100084871000000003@basic-context-000003f9;2 joined 'simple_bridge' basic-bridge <7cd9bcce-a017-46e2-b4ac-2346a86ac565>
+    -- Channel PJSIP/1029-000003f9 left 'simple_bridge' basic-bridge <7cd9bcce-a017-46e2-b4ac-2346a86ac565>
+    -- Channel Local/99713891641029100084871000000003@basic-context-000003f9;2 left 'simple_bridge' basic-bridge <7cd9bcce-a017-46e2-b4ac-2346a86ac565>
+  == Spawn extension (basic-context, 99713891641029100084871000000003, 7) exited non-zero on 'Local/99713891641029100084871000000003@basic-context-000003f9;2'
+    -- Executing [h@default:1] Verbose("Local/99713891641029100084871000000003@basic-context-000003f9;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "CALLERID_NUM=1029") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641029100084871000000003@basic-context-000003f9;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641029100084871000000003@basic-context-000003f9;1", "/etc/asterisk/dtmf.sh completed 9971389164 1029 10008487 1000000003 &") in new stack
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-000003fa;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-000003fa;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-000003fa;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-000003fa;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-000003fa;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-000003fa;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-000003fa;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-000003fa;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-000003fa;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-000003fa;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-000003fb;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-000003fb;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-000003fb;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-000003fb;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-000003fb;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-000003fb;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-000003fb;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-000003fb;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-000003fb;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-000003fb;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-000003fc;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-000003fc;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-000003fc;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-000003fc;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-000003fc;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-000003fc;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-000003fc;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-000003fc;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-000003fc;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-000003fc;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-000003fd;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-000003fd;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-000003fd;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-000003fd;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-000003fd;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-000003fd;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-000003fd;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-000003fd;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-000003fd;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-000003fd;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-000003fe;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-000003fe;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-000003fe;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-000003fe;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-000003fe;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-000003fe;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-000003fe;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-000003fe;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-000003fe;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-000003fe;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-000003ff;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-000003ff;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-000003ff;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-000003ff;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-000003ff;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-000003ff;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-000003ff;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-000003ff;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-000003ff;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-000003ff;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000400;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000400;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000400;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000400;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000400;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000400;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000400;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000400;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000400;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000400;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000401;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000401;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000401;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000401;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000401;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000401;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000401;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000401;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000401;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000401;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000402;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000402;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000402;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000402;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000402;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000402;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000402;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000402;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000402;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000402;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000403;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000403;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000403;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000403;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000403;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000403;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000403;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000403;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000403;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000403;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000404;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000404;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000404;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000404;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000404;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000404;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000404;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000404;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000404;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000404;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000405;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000405;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000405;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000405;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000405;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000405;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000405;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000405;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000405;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000405;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000406;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000406;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000406;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000406;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000406;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000406;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000406;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000406;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000406;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000406;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000407;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000407;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000407;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000407;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000407;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000407;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000407;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000407;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000407;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000407;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000408;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000408;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000408;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000408;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000408;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000408;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000408;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000408;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000408;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000408;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-00000409;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-00000409;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-00000409;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-00000409;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-00000409;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-00000409;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-00000409;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-00000409;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-00000409;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-00000409;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-0000040a;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-0000040a;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-0000040a;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-0000040a;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-0000040a;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-0000040a;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-0000040a;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-0000040a;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-0000040a;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-0000040a;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-0000040b;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-0000040b;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-0000040b;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-0000040b;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-0000040b;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-0000040b;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-0000040b;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-0000040b;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-0000040b;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-0000040b;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641032100084871000000003@basic-context extension h
+    -- Called 99713891641032100084871000000003@basic-context
+    -- Executing [99713891641032100084871000000003@basic-context:1] Verbose("Local/99713891641032100084871000000003@basic-context-0000040c;2", "1, "User dialed 99713891641032100084871000000003"") in new stack
+  "User dialed 99713891641032100084871000000003"
+    -- Executing [99713891641032100084871000000003@basic-context:2] Set("Local/99713891641032100084871000000003@basic-context-0000040c;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:3] Set("Local/99713891641032100084871000000003@basic-context-0000040c;2", "CALLERID_NUM=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:4] Set("Local/99713891641032100084871000000003@basic-context-0000040c;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:5] Set("Local/99713891641032100084871000000003@basic-context-0000040c;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:6] Set("Local/99713891641032100084871000000003@basic-context-0000040c;2", "CALLERID(num)=1032") in new stack
+    -- Executing [99713891641032100084871000000003@basic-context:7] Dial("Local/99713891641032100084871000000003@basic-context-0000040c;2", "PJSIP/9971389164@1032,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1032
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641032100084871000000003@basic-context:8] System("Local/99713891641032100084871000000003@basic-context-0000040c;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1032 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641032100084871000000003@basic-context-0000040c;2' status is 'CONGESTION'
+    -- Local/99713891641032100084871000000003@basic-context-0000040c;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641029100084871000000003@basic-context extension h
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-0000040d;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-0000040d;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-0000040d;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-0000040d;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-0000040d;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-0000040d;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-0000040d;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+  == Everyone is busy/congested at this time (1:0/1/0)
+    -- Executing [99713891641029100084871000000003@basic-context:8] System("Local/99713891641029100084871000000003@basic-context-0000040d;2", "/etc/asterisk/dtmf.sh not_answered 9971389164 1029 10008487 1000000003 CONGESTION &") in new stack
+    -- Auto fallthrough, channel 'Local/99713891641029100084871000000003@basic-context-0000040d;2' status is 'CONGESTION'
+    -- Local/99713891641029100084871000000003@basic-context-0000040d;1 is circuit-busy
+pi*CLI> channel originate Local/99713891641029100084871000000003@basic-context extension h
+    -- Called 99713891641029100084871000000003@basic-context
+    -- Executing [99713891641029100084871000000003@basic-context:1] Verbose("Local/99713891641029100084871000000003@basic-context-0000040e;2", "1, "User dialed 99713891641029100084871000000003"") in new stack
+  "User dialed 99713891641029100084871000000003"
+    -- Executing [99713891641029100084871000000003@basic-context:2] Set("Local/99713891641029100084871000000003@basic-context-0000040e;2", "PHONE=9971389164") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:3] Set("Local/99713891641029100084871000000003@basic-context-0000040e;2", "CALLERID_NUM=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:4] Set("Local/99713891641029100084871000000003@basic-context-0000040e;2", "USER_ID=10008487") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:5] Set("Local/99713891641029100084871000000003@basic-context-0000040e;2", "DIALPLAN=1000000003") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:6] Set("Local/99713891641029100084871000000003@basic-context-0000040e;2", "CALLERID(num)=1029") in new stack
+    -- Executing [99713891641029100084871000000003@basic-context:7] Dial("Local/99713891641029100084871000000003@basic-context-0000040e;2", "PJSIP/9971389164@1029,30,U(1000000003)") in new stack
+    -- Called PJSIP/9971389164@1029
+       > 0xffff8031c190 -- Strict RTP learning after remote address set to: 192.168.1.50:10012
+    -- PJSIP/1029-0000040e is making progress passing it to Local/99713891641029100084871000000003@basic-context-0000040e;2
+    -- Local/99713891641029100084871000000003@basic-context-0000040e;1 is making progress
+       > 0xffff8031c190 -- Strict RTP switching to RTP target address 192.168.1.50:10012 as source
+       > 0xffff8031c190 -- Strict RTP learning complete - Locking on source address 192.168.1.50:10012
+    -- PJSIP/1029-0000040e answered Local/99713891641029100084871000000003@basic-context-0000040e;2
+    -- PJSIP/1029-0000040e Internal Gosub(1000000003,s,1) start
+    -- Executing [s@1000000003:1] Verbose("PJSIP/1029-0000040e", "1, "Call is answered" ") in new stack
+  "Call is answered" 
+    -- Executing [s@1000000003:2] Set("PJSIP/1029-0000040e", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003:3] Set("PJSIP/1029-0000040e", "CALLERID_NUM=1029") in new stack
+    -- Executing [s@1000000003:4] Set("PJSIP/1029-0000040e", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003:5] Set("PJSIP/1029-0000040e", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003:6] Set("PJSIP/1029-0000040e", "TIMEOUT(absolute)=600") in new stack
+    -- Channel will hangup at 2024-03-22 18:04:39.755 IST.
+    -- Executing [s@1000000003:7] System("PJSIP/1029-0000040e", "/etc/asterisk/dtmf.sh answered 9971389164 1029 10008487 1000000003 &") in new stack
+    -- Executing [s@1000000003:8] Goto("PJSIP/1029-0000040e", "1000000003-1,s,1") in new stack
+    -- Goto (1000000003-1,s,1)
+    -- Executing [s@1000000003-1:1] Verbose("PJSIP/1029-0000040e", "1, "Started Extension 1 of campaign 1000000003"") in new stack
+  "Started Extension 1 of campaign 1000000003"
+    -- Executing [s@1000000003-1:2] Set("PJSIP/1029-0000040e", "PHONE=9971389164") in new stack
+    -- Executing [s@1000000003-1:3] Set("PJSIP/1029-0000040e", "CALLERID_NUM=1029") in new stack
+    -- Executing [s@1000000003-1:4] Set("PJSIP/1029-0000040e", "USER_ID=10008487") in new stack
+    -- Executing [s@1000000003-1:5] Set("PJSIP/1029-0000040e", "DIALPLAN=1000000003") in new stack
+    -- Executing [s@1000000003-1:6] Set("PJSIP/1029-0000040e", "current_extension=1") in new stack
+    -- Executing [s@1000000003-1:7] Playback("PJSIP/1029-0000040e", "initial_wait") in new stack
+    -- <PJSIP/1029-0000040e> Playing 'initial_wait.slin' (language 'en')
+    -- Executing [s@1000000003-1:8] System("PJSIP/1029-0000040e", "/etc/asterisk/dtmf.sh send_sms 9971389164 1029 10008487 1000000003 3 &") in new stack
+    -- Executing [s@1000000003-1:9] Playback("PJSIP/1029-0000040e", "14") in new stack
+    -- <PJSIP/1029-0000040e> Playing '14.slin16' (language 'en')
+  == Spawn extension (1000000003-1, s, 9) exited non-zero on 'PJSIP/1029-0000040e'
+[Mar 22 17:54:42] WARNING[71412][C-00000446]: app_stack.c:1079 gosub_run: PJSIP/1029-0000040e Abnormal 'Gosub(1000000003,s,1)' exit.  Popping routine return locations.
+    -- Local/99713891641029100084871000000003@basic-context-0000040e;1 answered
+    -- Executing [h@default:1] Verbose("Local/99713891641029100084871000000003@basic-context-0000040e;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "CALLERID_NUM=1029") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641029100084871000000003@basic-context-0000040e;1", "/etc/asterisk/dtmf.sh completed 9971389164 1029 10008487 1000000003 &") in new stack
+    -- Channel PJSIP/1029-0000040e joined 'simple_bridge' basic-bridge <528ff59d-01c1-487d-ba3a-56d9cbd443b6>
+    -- Channel Local/99713891641029100084871000000003@basic-context-0000040e;2 joined 'simple_bridge' basic-bridge <528ff59d-01c1-487d-ba3a-56d9cbd443b6>
+    -- Channel PJSIP/1029-0000040e left 'simple_bridge' basic-bridge <528ff59d-01c1-487d-ba3a-56d9cbd443b6>
+    -- Channel Local/99713891641029100084871000000003@basic-context-0000040e;2 left 'simple_bridge' basic-bridge <528ff59d-01c1-487d-ba3a-56d9cbd443b6>
+  == Spawn extension (basic-context, 99713891641029100084871000000003, 7) exited non-zero on 'Local/99713891641029100084871000000003@basic-context-0000040e;2'
+    -- Executing [h@default:1] Verbose("Local/99713891641029100084871000000003@basic-context-0000040e;1", "1, "Call is hungup"") in new stack
+  "Call is hungup"
+    -- Executing [h@default:2] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "PHONE=9971389164") in new stack
+    -- Executing [h@default:3] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "CALLERID_NUM=1029") in new stack
+    -- Executing [h@default:4] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "USER_ID=10008487") in new stack
+    -- Executing [h@default:5] Set("Local/99713891641029100084871000000003@basic-context-0000040e;1", "DIALPLAN=1000000003") in new stack
+    -- Executing [h@default:6] System("Local/99713891641029100084871000000003@basic-context-0000040e;1", "/etc/asterisk/dtmf.sh completed 9971389164 1029 10008487 1000000003 &") in new stack
+pi*CLI> 
