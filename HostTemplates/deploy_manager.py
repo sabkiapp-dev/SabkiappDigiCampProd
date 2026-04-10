@@ -20,9 +20,9 @@ from PyQt5.QtWidgets import (
     QPushButton, QProgressBar, QLabel, QMessageBox, QFileDialog, QCheckBox,
     QListWidget, QListWidgetItem, QRadioButton, QButtonGroup, QSplitter,
     QSizePolicy, QStatusBar, QAction, QMenuBar, QFrame, QScrollArea,
-    QInputDialog
+    QInputDialog, QStackedWidget
 )
-from PyQt5.QtCore import QThread, pyqtSignal, Qt, QTimer
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QTimer, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QFont, QColor, QPalette, QTextCursor
 from PyQt5.QtGui import QValidator
 
@@ -40,6 +40,231 @@ PHASE2_STEPS = [
     "Step 8: Configure /etc/default/asterisk",
     "Step 9: Enable and restart Asterisk",
 ]
+
+
+# ─────────────────────────────────────────────
+#  Theme
+# ─────────────────────────────────────────────
+
+DARK_STYLESHEET = """
+QWidget {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: "Segoe UI", "SF Pro Display", "Ubuntu", "Cantarell", sans-serif;
+    font-size: 13px;
+}
+QMainWindow { background-color: #0d1117; }
+QMenuBar {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    border-bottom: 1px solid #30363d;
+    padding: 2px 0;
+}
+QMenuBar::item { padding: 6px 12px; border-radius: 4px; background: transparent; }
+QMenuBar::item:selected { background-color: #21262d; }
+QMenu {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 6px;
+}
+QMenu::item { padding: 8px 24px 8px 12px; border-radius: 4px; }
+QMenu::item:selected { background-color: #1f2937; color: #58a6ff; }
+QMenu::separator { height: 1px; background-color: #30363d; margin: 4px 8px; }
+QStatusBar {
+    background-color: #0d1117;
+    color: #8b949e;
+    border-top: 1px solid #30363d;
+    font-size: 12px;
+    padding: 2px 8px;
+}
+QGroupBox {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin-top: 18px;
+    padding: 16px 14px 14px 14px;
+    font-weight: 600;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 12px;
+    padding: 3px 10px;
+    background-color: #1f2937;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    color: #58a6ff;
+    font-size: 11px;
+    font-weight: 600;
+}
+QLineEdit, QSpinBox, QComboBox {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 7px 11px;
+    color: #c9d1d9;
+    selection-background-color: #264f78;
+    min-height: 18px;
+}
+QLineEdit:focus, QSpinBox:focus, QComboBox:focus { border-color: #58a6ff; }
+QLineEdit:disabled, QSpinBox:disabled, QComboBox:disabled {
+    background-color: #161b22;
+    color: #484f58;
+    border-color: #21262d;
+}
+QComboBox::drop-down { border: none; width: 20px; }
+QComboBox::down-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #8b949e;
+    margin-right: 6px;
+}
+QComboBox QAbstractItemView {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    selection-background-color: #1f2937;
+    color: #c9d1d9;
+    padding: 4px;
+    outline: none;
+}
+QPushButton {
+    background-color: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 7px 16px;
+    color: #c9d1d9;
+    font-weight: 500;
+    min-height: 18px;
+}
+QPushButton:hover { background-color: #30363d; border-color: #8b949e; }
+QPushButton:pressed { background-color: #1c2128; }
+QPushButton:disabled { background-color: #161b22; color: #484f58; border-color: #21262d; }
+QPushButton:checked { background-color: #264f78; border-color: #58a6ff; color: #58a6ff; }
+QPushButton#primaryBtn {
+    background-color: #238636; border-color: #2ea043; color: #fff; font-weight: 600;
+}
+QPushButton#primaryBtn:hover { background-color: #2ea043; border-color: #3fb950; }
+QPushButton#primaryBtn:disabled { background-color: #1a3028; color: #3fb950; border-color: #1a3028; }
+QPushButton#dangerBtn {
+    background-color: #da3633; border-color: #f85149; color: #fff; font-weight: 600;
+}
+QPushButton#dangerBtn:hover { background-color: #f85149; border-color: #ff7b72; }
+QPushButton#dangerBtn:disabled { background-color: #3d1c1c; color: #f85149; border-color: #3d1c1c; }
+QPushButton#accentBtn {
+    background-color: #1f6feb; border-color: #388bfd; color: #fff; font-weight: 600;
+}
+QPushButton#accentBtn:hover { background-color: #388bfd; border-color: #58a6ff; }
+QPushButton#navBtn {
+    background-color: transparent;
+    border: none;
+    border-left: 2px solid transparent;
+    border-radius: 0;
+    padding: 10px 14px;
+    color: #8b949e;
+    text-align: left;
+    font-weight: 400;
+    font-size: 13px;
+}
+QPushButton#navBtn:hover { background-color: #1f2937; color: #c9d1d9; }
+QPushButton#navBtn:checked {
+    background-color: #1f2937;
+    color: #58a6ff;
+    border-left-color: #58a6ff;
+    font-weight: 500;
+}
+QPushButton#collapseBtn {
+    background-color: transparent;
+    border: none;
+    border-top: 1px solid #30363d;
+    border-radius: 0;
+    padding: 10px;
+    color: #8b949e;
+    text-align: center;
+    font-size: 14px;
+    min-height: 16px;
+}
+QPushButton#collapseBtn:hover { color: #c9d1d9; background-color: #1f2937; }
+QProgressBar {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    text-align: center;
+    color: #c9d1d9;
+    min-height: 22px;
+    font-size: 12px;
+    font-weight: 500;
+}
+QProgressBar::chunk {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1f6feb, stop:1 #58a6ff);
+    border-radius: 5px;
+}
+QScrollArea { border: none; background-color: transparent; }
+QScrollArea > QWidget > QWidget { background-color: transparent; }
+QScrollBar:vertical {
+    background-color: #0d1117; width: 8px; border-radius: 4px; margin: 0;
+}
+QScrollBar::handle:vertical {
+    background-color: #30363d; border-radius: 4px; min-height: 24px;
+}
+QScrollBar::handle:vertical:hover { background-color: #484f58; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    height: 0; background: none;
+}
+QScrollBar:horizontal {
+    background-color: #0d1117; height: 8px; border-radius: 4px; margin: 0;
+}
+QScrollBar::handle:horizontal {
+    background-color: #30363d; border-radius: 4px; min-width: 24px;
+}
+QScrollBar::handle:horizontal:hover { background-color: #484f58; }
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    width: 0; background: none;
+}
+QLabel { color: #c9d1d9; background-color: transparent; }
+QListWidget {
+    background-color: #0d1117; border: 1px solid #30363d;
+    border-radius: 6px; padding: 4px; outline: none;
+}
+QListWidget::item { padding: 6px 8px; border-radius: 4px; }
+QListWidget::item:selected { background-color: #1f2937; color: #58a6ff; }
+QListWidget::item:hover { background-color: #161b22; }
+QCheckBox, QRadioButton { spacing: 8px; color: #c9d1d9; background: transparent; }
+QToolTip {
+    background-color: #1f2937; color: #c9d1d9;
+    border: 1px solid #30363d; border-radius: 4px; padding: 5px 9px; font-size: 12px;
+}
+QFrame#pageSeparator { background-color: #30363d; max-height: 1px; border: none; }
+QFrame#sidebar { background-color: #161b22; border-right: 1px solid #30363d; }
+"""
+
+
+def setup_dark_theme(app: QApplication) -> None:
+    """Apply GitHub Dark palette and QSS stylesheet to the application."""
+    app.setStyle("Fusion")
+    c = QColor
+    palette = QPalette()
+    palette.setColor(QPalette.Window,           c("#0d1117"))
+    palette.setColor(QPalette.WindowText,       c("#c9d1d9"))
+    palette.setColor(QPalette.Base,             c("#0d1117"))
+    palette.setColor(QPalette.AlternateBase,    c("#161b22"))
+    palette.setColor(QPalette.ToolTipBase,      c("#1f2937"))
+    palette.setColor(QPalette.ToolTipText,      c("#c9d1d9"))
+    palette.setColor(QPalette.Text,             c("#c9d1d9"))
+    palette.setColor(QPalette.Button,           c("#21262d"))
+    palette.setColor(QPalette.ButtonText,       c("#c9d1d9"))
+    palette.setColor(QPalette.BrightText,       c("#f0f6fc"))
+    palette.setColor(QPalette.Link,             c("#58a6ff"))
+    palette.setColor(QPalette.Highlight,        c("#264f78"))
+    palette.setColor(QPalette.HighlightedText,  c("#f0f6fc"))
+    palette.setColor(QPalette.Disabled, QPalette.Text,       c("#484f58"))
+    palette.setColor(QPalette.Disabled, QPalette.ButtonText, c("#484f58"))
+    palette.setColor(QPalette.Disabled, QPalette.WindowText, c("#484f58"))
+    app.setPalette(palette)
+    app.setStyleSheet(DARK_STYLESHEET)
 
 
 # ─────────────────────────────────────────────
