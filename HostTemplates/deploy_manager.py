@@ -1300,6 +1300,8 @@ class Phase1Widget(QWidget):
 # ─────────────────────────────────────────────
 
 class Phase2Widget(QWidget):
+    ssh_status_changed = pyqtSignal(bool)
+
     def __init__(self, model: ConfigModel, generator: ConfigGenerator, parent=None):
         super().__init__(parent)
         self.model = model
@@ -1310,16 +1312,28 @@ class Phase2Widget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
+        root.setContentsMargins(20, 20, 20, 20)
+        root.setSpacing(12)
+
+        # Page header
+        root.addWidget(make_page_header(
+            "Phase 2 \u2014 RPi Deployment",
+            "Deploy code and configure the Raspberry Pi over SSH"
+        ))
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_content = QWidget()
         scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setContentsMargins(0, 0, 0, 0)
+        scroll_layout.setSpacing(12)
 
         # ── 1. SSH Connection ─────────────────────────
         ssh_group = QGroupBox("SSH Connection (RPi)")
         ssh_form = QFormLayout(ssh_group)
         ssh_form.setLabelAlignment(Qt.AlignRight)
+        ssh_form.setVerticalSpacing(12)
+        ssh_form.setHorizontalSpacing(16)
 
         self.ssh_ip_edit = QLineEdit()
         self.ssh_ip_edit.setValidator(make_ip_validator())
@@ -1341,10 +1355,11 @@ class Phase2Widget(QWidget):
         ssh_form.addRow("SSH Password:", sp_layout)
 
         self.hostname_edit = QLineEdit()
-        self.hostname_edit.setPlaceholderText("e.g. host2 — used to name the SSH key")
+        self.hostname_edit.setPlaceholderText("e.g. host2 \u2014 used to name the SSH key")
         ssh_form.addRow("Hostname:", self.hostname_edit)
 
         self.test_ssh_btn = QPushButton("Test SSH Connection")
+        self.test_ssh_btn.setObjectName("accentBtn")
         self.test_ssh_btn.clicked.connect(self._test_ssh)
         self.ssh_status_label = QLabel("")
         test_layout = QHBoxLayout()
@@ -1359,6 +1374,8 @@ class Phase2Widget(QWidget):
         dep_group = QGroupBox("Deployment Configuration")
         dep_form = QFormLayout(dep_group)
         dep_form.setLabelAlignment(Qt.AlignRight)
+        dep_form.setVerticalSpacing(12)
+        dep_form.setHorizontalSpacing(16)
 
         code_layout = QHBoxLayout()
         self.code_path_edit = QLineEdit()
@@ -1370,7 +1387,11 @@ class Phase2Widget(QWidget):
         code_layout.addWidget(code_browse)
         dep_form.addRow("Code (.zip):", code_layout)
 
-        self.cf_token_edit, cf_show_btn = password_field("Token — skip if Cloudflare already running")
+        self.cf_token_edit, cf_show_btn = password_field("Token \u2014 skip if Cloudflare already running")
+        self.cf_token_edit.setToolTip(
+            "Cloudflare tunnel token. Optional \u2014 if cloudflared is already running on the RPi, "
+            "leave this empty and it will be skipped automatically."
+        )
         cf_layout = QHBoxLayout()
         cf_layout.addWidget(self.cf_token_edit)
         cf_layout.addWidget(cf_show_btn)
@@ -1382,6 +1403,8 @@ class Phase2Widget(QWidget):
         gw_group = QGroupBox("GSM Gateway")
         gw_form = QFormLayout(gw_group)
         gw_form.setLabelAlignment(Qt.AlignRight)
+        gw_form.setVerticalSpacing(12)
+        gw_form.setHorizontalSpacing(16)
 
         self.gw_ip_edit = QLineEdit()
         self.gw_ip_edit.setValidator(make_ip_validator())
@@ -1395,10 +1418,7 @@ class Phase2Widget(QWidget):
         # ── Buttons ───────────────────────────────────
         btn_layout = QHBoxLayout()
         self.execute_btn = QPushButton("Execute on RPi")
-        self.execute_btn.setStyleSheet(
-            "QPushButton { background-color: #27ae60; color: white; font-weight: bold; }"
-            "QPushButton:hover { background-color: #2ecc71; }"
-        )
+        self.execute_btn.setObjectName("primaryBtn")
         self.execute_btn.clicked.connect(self._execute)
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setEnabled(False)
@@ -1407,6 +1427,11 @@ class Phase2Widget(QWidget):
         btn_layout.addWidget(self.cancel_btn)
         btn_layout.addWidget(self.execute_btn)
         root.addLayout(btn_layout)
+
+        # ── Step Wizard (hidden until execution starts) ─
+        self.step_wizard = StepWizardWidget(total_steps=6)
+        self.step_wizard.hide()
+        root.addWidget(self.step_wizard)
 
         # ── Progress ──────────────────────────────────
         self.progress = QProgressBar()
@@ -1420,12 +1445,9 @@ class Phase2Widget(QWidget):
         self.terminal = make_terminal()
         root.addWidget(self.terminal)
 
-        # ── Download Public Key button (hidden until key is ready) ──
+        # ── Download Public Key (hidden until key ready) ──
         self.dl_key_btn = QPushButton("Download Public Key")
-        self.dl_key_btn.setStyleSheet(
-            "QPushButton { background-color: #2980b9; color: white; font-weight: bold; }"
-            "QPushButton:hover { background-color: #3498db; }"
-        )
+        self.dl_key_btn.setObjectName("accentBtn")
         self.dl_key_btn.clicked.connect(self._download_pubkey)
         self.dl_key_btn.hide()
         root.addWidget(self.dl_key_btn)
@@ -1466,7 +1488,6 @@ class Phase2Widget(QWidget):
         self.ssh_status_label.setStyleSheet("")
         rpi_ip = self.model.rpi_ip
         user = self.model.ssh_user
-
         ssh_pass = self.model.ssh_pass
         cmd = ["sshpass", "-p", ssh_pass,
                "ssh", "-o", "ConnectTimeout=5",
@@ -1474,19 +1495,21 @@ class Phase2Widget(QWidget):
                "-o", "UserKnownHostsFile=/dev/null",
                "-o", "LogLevel=ERROR",
                f"{user}@{rpi_ip}", "echo OK"]
-
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
             if result.returncode == 0:
                 self.ssh_status_label.setText("Connected!")
-                self.ssh_status_label.setStyleSheet("color: green; font-weight: bold;")
+                self.ssh_status_label.setStyleSheet("color: #3fb950; font-weight: bold;")
+                self.ssh_status_changed.emit(True)
             else:
                 self.ssh_status_label.setText("Failed")
-                self.ssh_status_label.setStyleSheet("color: red;")
+                self.ssh_status_label.setStyleSheet("color: #f85149;")
+                self.ssh_status_changed.emit(False)
                 append_terminal(self.terminal, f"SSH test failed: {result.stderr.strip()}")
         except Exception as e:
             self.ssh_status_label.setText("Error")
-            self.ssh_status_label.setStyleSheet("color: red;")
+            self.ssh_status_label.setStyleSheet("color: #f85149;")
+            self.ssh_status_changed.emit(False)
             append_terminal(self.terminal, f"SSH error: {e}")
 
     def _execute(self):
@@ -1518,6 +1541,9 @@ class Phase2Widget(QWidget):
         self.progress.setFormat("Starting...")
         self.execute_btn.setEnabled(False)
         self.cancel_btn.setEnabled(True)
+        # Show and reset step wizard
+        self.step_wizard.reset()
+        self.step_wizard.show()
 
         zip_name  = Path(code_zip).name
         key_name  = f"{hostname}_ed25519"
@@ -1799,6 +1825,9 @@ echo "-> MachineStatus service started on port 9000."
         append_terminal(self.terminal, line)
         if line.startswith("[Step "):
             step_n = int(line[6]) if line[6].isdigit() else 0
+            if step_n:
+                self.step_wizard.set_active_step(step_n)
+                self.step_wizard.set_step_label(line.strip())
             self.progress.setValue(step_n)
             self.progress.setFormat(line.strip())
 
@@ -1808,10 +1837,12 @@ echo "-> MachineStatus service started on port 9000."
         if code == 0:
             self.progress.setValue(6)
             self.progress.setFormat("Done!")
+            self.step_wizard.mark_all_completed()
             append_terminal(self.terminal, "\n[SUCCESS] All steps complete.")
             self.dl_key_btn.show()
         else:
             self.progress.setFormat(f"Failed (exit {code})")
+            self.step_wizard.mark_failed()
             append_terminal(self.terminal, f"\n[FAILED] Exit code: {code}")
 
     def _download_pubkey(self):
@@ -1832,6 +1863,8 @@ echo "-> MachineStatus service started on port 9000."
             self.runner.terminate_process()
         self.execute_btn.setEnabled(True)
         self.cancel_btn.setEnabled(False)
+        self.step_wizard.reset()
+        self.step_wizard.hide()
         append_terminal(self.terminal, "\n[CANCELLED] by user.")
 
     def refresh_from_model(self):
