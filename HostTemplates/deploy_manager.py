@@ -842,6 +842,7 @@ class SidebarWidget(QFrame):
         self._anim = QPropertyAnimation(self, b"maximumWidth")
         self._anim.setDuration(180)
         self._anim.setEasingCurve(QEasingCurve.InOutCubic)
+        self._anim.finished.connect(self._on_anim_done)
 
     # ── Public API ────────────────────────────
 
@@ -871,25 +872,19 @@ class SidebarWidget(QFrame):
             self._collapse_btn.setText("\u276f")
             self._collapse_btn.setToolTip("Expand sidebar")
             self.setMinimumWidth(self.COLLAPSED_WIDTH)
-            start_w, end_w = self.EXPANDED_WIDTH, self.COLLAPSED_WIDTH
+            start_w, end_w = self.width(), self.COLLAPSED_WIDTH
         else:
             # Expand: animate first, then show text in _on_anim_done
             self._collapse_btn.setText("\u276e")
             self._collapse_btn.setToolTip("Collapse sidebar")
             self.setMinimumWidth(0)
-            self.setMaximumWidth(self.EXPANDED_WIDTH)
             start_w, end_w = self.COLLAPSED_WIDTH, self.EXPANDED_WIDTH
 
         self._anim.setStartValue(start_w)
         self._anim.setEndValue(end_w)
-        self._anim.finished.connect(self._on_anim_done)
         self._anim.start()
 
     def _on_anim_done(self) -> None:
-        try:
-            self._anim.finished.disconnect(self._on_anim_done)
-        except TypeError:
-            pass
         target = self.COLLAPSED_WIDTH if self._collapsed else self.EXPANDED_WIDTH
         self.setMinimumWidth(target)
         self.setMaximumWidth(target)
