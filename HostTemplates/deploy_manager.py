@@ -1933,6 +1933,9 @@ class ConfigPreviewWidget(QWidget):
 
         self._refresh()
 
+    def refresh(self):
+        self._refresh()
+
     def _refresh(self):
         idx = self.selector.currentIndex()
         key = self.PREVIEWS[idx][1]
@@ -2202,7 +2205,7 @@ class MainWindow(QMainWindow):
         if idx == 1:
             self.phase2_widget.refresh_from_model()
         elif idx == 2:
-            self.preview_widget._refresh()
+            self.preview_widget.refresh()
         elif idx == 3:
             self.utils_widget.refresh_from_model()
 
@@ -2259,7 +2262,7 @@ class MainWindow(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName("GSM Gateway Deployer")
-    app.setStyle("Fusion")
+    setup_dark_theme(app)
     win = MainWindow()
     win.show()
     sys.exit(app.exec_())
