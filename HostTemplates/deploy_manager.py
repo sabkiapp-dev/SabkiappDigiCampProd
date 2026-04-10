@@ -580,11 +580,20 @@ class ScriptRunner(QThread):
 def make_terminal() -> QPlainTextEdit:
     t = QPlainTextEdit()
     t.setReadOnly(True)
-    font = QFont("Monospace", 9)
+    font = QFont("JetBrains Mono", 10)
     font.setStyleHint(QFont.TypeWriter)
     t.setFont(font)
-    t.setStyleSheet("background-color: #1e1e1e; color: #d4d4d4;")
-    t.setMinimumHeight(180)
+    t.setStyleSheet(
+        "QPlainTextEdit {"
+        "  background-color: #0a0c10;"
+        "  color: #a5d6ff;"
+        "  border: 1px solid #30363d;"
+        "  border-radius: 8px;"
+        "  padding: 12px;"
+        "  selection-background-color: #264f78;"
+        "}"
+    )
+    t.setMinimumHeight(200)
     return t
 
 
@@ -660,8 +669,10 @@ def password_field(placeholder: str = "") -> tuple:
     if placeholder:
         edit.setPlaceholderText(placeholder)
     btn = QPushButton("Show")
-    btn.setFixedWidth(50)
+    btn.setFixedWidth(56)
     btn.setCheckable(True)
+    btn.setCursor(Qt.PointingHandCursor)
+    btn.setToolTip("Toggle password visibility")
 
     def toggle(checked):
         edit.setEchoMode(QLineEdit.Normal if checked else QLineEdit.Password)
