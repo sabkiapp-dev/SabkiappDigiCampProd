@@ -1896,6 +1896,13 @@ class ConfigPreviewWidget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
+        root.setContentsMargins(20, 20, 20, 20)
+        root.setSpacing(12)
+
+        root.addWidget(make_page_header(
+            "Config Preview",
+            "Review generated configuration files before deployment"
+        ))
 
         top_layout = QHBoxLayout()
         top_layout.addWidget(QLabel("Preview:"))
@@ -1910,11 +1917,8 @@ class ConfigPreviewWidget(QWidget):
         top_layout.addWidget(self.refresh_btn)
         root.addLayout(top_layout)
 
-        self.text_area = QPlainTextEdit()
+        self.text_area = make_terminal()
         self.text_area.setReadOnly(True)
-        font = QFont("Monospace", 9)
-        font.setStyleHint(QFont.TypeWriter)
-        self.text_area.setFont(font)
         root.addWidget(self.text_area)
 
         btn_layout = QHBoxLayout()
@@ -1987,12 +1991,21 @@ class UtilitiesWidget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
+        root.setContentsMargins(20, 20, 20, 20)
+        root.setSpacing(12)
+
+        root.addWidget(make_page_header(
+            "Utilities",
+            "Standalone tools and diagnostics"
+        ))
 
         # ── Cloudflare ────────────────────────────────
         cf_group = QGroupBox("Cloudflare Tunnel Setup (standalone)")
         cf_layout = QVBoxLayout(cf_group)
         cf_form = QFormLayout()
         cf_form.setLabelAlignment(Qt.AlignRight)
+        cf_form.setVerticalSpacing(12)
+        cf_form.setHorizontalSpacing(16)
 
         self.cf_token_util_edit, tok_btn = password_field("Enter Cloudflare token (not saved)")
         tok_layout = QHBoxLayout()
