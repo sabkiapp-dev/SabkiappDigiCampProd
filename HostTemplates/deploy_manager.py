@@ -693,6 +693,216 @@ def hbox(*widgets) -> QHBoxLayout:
 
 
 # ─────────────────────────────────────────────
+#  Page Header Helper
+# ─────────────────────────────────────────────
+
+def make_page_header(title: str, subtitle: str = "") -> QWidget:
+    """Return a widget containing a bold title, optional subtitle, and separator line."""
+    container = QWidget()
+    container.setStyleSheet("background: transparent;")
+    layout = QVBoxLayout(container)
+    layout.setContentsMargins(0, 0, 0, 12)
+    layout.setSpacing(4)
+
+    title_lbl = QLabel(title)
+    title_lbl.setStyleSheet(
+        "color: #f0f6fc; font-size: 18px; font-weight: 600; background: transparent;"
+    )
+    layout.addWidget(title_lbl)
+
+    if subtitle:
+        sub_lbl = QLabel(subtitle)
+        sub_lbl.setStyleSheet(
+            "color: #8b949e; font-size: 13px; background: transparent;"
+        )
+        layout.addWidget(sub_lbl)
+
+    sep = QFrame()
+    sep.setObjectName("pageSeparator")
+    sep.setFrameShape(QFrame.HLine)
+    layout.addWidget(sep)
+
+    return container
+
+
+# ─────────────────────────────────────────────
+#  Sidebar Widget
+# ─────────────────────────────────────────────
+
+class SidebarWidget(QFrame):
+    """Collapsible left sidebar with nav items and status indicators."""
+
+    page_changed = pyqtSignal(int)
+
+    EXPANDED_WIDTH = 210
+    COLLAPSED_WIDTH = 52
+
+    NAV_ITEMS = [
+        ("\u25a0", "Phase 1 \u00b7 SD Card"),
+        ("\u25b6", "Phase 2 \u00b7 RPi Setup"),
+        ("\u25c8", "Config Preview"),
+        ("\u2699", "Utilities"),
+    ]
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setObjectName("sidebar")
+        self._collapsed = False
+        self._nav_buttons: list = []
+        self._status_labels: dict = {}
+        self._build_ui()
+        self._setup_animation()
+
+    def _build_ui(self):
+        self.setFixedWidth(self.EXPANDED_WIDTH)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        # App title
+        self._title_label = QLabel("GSM DEPLOYER")
+        self._title_label.setStyleSheet(
+            "color: #58a6ff; font-weight: 700; font-size: 13px;"
+            " padding: 18px 16px 14px 16px; letter-spacing: 0.5px;"
+            " background: transparent;"
+        )
+        layout.addWidget(self._title_label)
+
+        # Title separator
+        sep_top = QFrame()
+        sep_top.setObjectName("pageSeparator")
+        sep_top.setFrameShape(QFrame.HLine)
+        layout.addWidget(sep_top)
+
+        # Nav buttons
+        nav_container = QWidget()
+        nav_container.setStyleSheet("background: transparent;")
+        nav_layout = QVBoxLayout(nav_container)
+        nav_layout.setContentsMargins(0, 8, 0, 8)
+        nav_layout.setSpacing(2)
+
+        self._btn_group = QButtonGroup(self)
+        self._btn_group.setExclusive(True)
+
+        for i, (icon, label) in enumerate(self.NAV_ITEMS):
+            btn = QPushButton(f"  {icon}  {label}")
+            btn.setObjectName("navBtn")
+            btn.setCheckable(True)
+            btn.setCursor(Qt.PointingHandCursor)
+            btn.setToolTip(label)
+            btn.clicked.connect(lambda _checked, idx=i: self.page_changed.emit(idx))
+            self._btn_group.addButton(btn, i)
+            nav_layout.addWidget(btn)
+            self._nav_buttons.append(btn)
+
+        self._nav_buttons[0].setChecked(True)
+        layout.addWidget(nav_container)
+
+        # Spacer
+        layout.addStretch()
+
+        # Status section separator
+        sep_bot = QFrame()
+        sep_bot.setObjectName("pageSeparator")
+        sep_bot.setFrameShape(QFrame.HLine)
+        layout.addWidget(sep_bot)
+
+        # Status indicators
+        self._status_container = QWidget()
+        self._status_container.setStyleSheet("background: transparent;")
+        st_layout = QVBoxLayout(self._status_container)
+        st_layout.setContentsMargins(14, 10, 14, 10)
+        st_layout.setSpacing(6)
+
+        hdr = QLabel("STATUS")
+        hdr.setStyleSheet(
+            "color: #484f58; font-size: 10px; font-weight: 600;"
+            " letter-spacing: 1px; background: transparent;"
+        )
+        st_layout.addWidget(hdr)
+
+        for key, text in [("ssh", "SSH: \u2014"), ("flash", "Flash: \u2014")]:
+            lbl = QLabel(f"\u25cf  {text}")
+            lbl.setStyleSheet("color: #484f58; font-size: 11px; background: transparent;")
+            st_layout.addWidget(lbl)
+            self._status_labels[key] = lbl
+
+        layout.addWidget(self._status_container)
+
+        # Collapse button
+        self._collapse_btn = QPushButton("\u276e")
+        self._collapse_btn.setObjectName("collapseBtn")
+        self._collapse_btn.setFixedHeight(38)
+        self._collapse_btn.setCursor(Qt.PointingHandCursor)
+        self._collapse_btn.setToolTip("Collapse sidebar")
+        self._collapse_btn.clicked.connect(self.toggle_collapse)
+        layout.addWidget(self._collapse_btn)
+
+    def _setup_animation(self):
+        self._anim = QPropertyAnimation(self, b"maximumWidth")
+        self._anim.setDuration(180)
+        self._anim.setEasingCurve(QEasingCurve.InOutCubic)
+
+    # ── Public API ────────────────────────────
+
+    def set_active_page(self, idx: int) -> None:
+        if 0 <= idx < len(self._nav_buttons):
+            self._nav_buttons[idx].setChecked(True)
+
+    def update_status(self, key: str, ok: bool, label: str = "") -> None:
+        lbl = self._status_labels.get(key)
+        if not lbl:
+            return
+        color = "#3fb950" if ok else "#484f58"
+        text = label or (key.title() + (": OK" if ok else ": \u2014"))
+        lbl.setStyleSheet(f"color: {color}; font-size: 11px; background: transparent;")
+        lbl.setText(f"\u25cf  {text}")
+
+    def toggle_collapse(self) -> None:
+        self._collapsed = not self._collapsed
+        self._anim.stop()
+
+        if self._collapsed:
+            # Shrink: hide text first, then animate
+            self._title_label.hide()
+            self._status_container.hide()
+            for i, btn in enumerate(self._nav_buttons):
+                btn.setText(f"  {self.NAV_ITEMS[i][0]}")
+            self._collapse_btn.setText("\u276f")
+            self._collapse_btn.setToolTip("Expand sidebar")
+            self.setMinimumWidth(self.COLLAPSED_WIDTH)
+            start_w, end_w = self.EXPANDED_WIDTH, self.COLLAPSED_WIDTH
+        else:
+            # Expand: animate first, then show text in _on_anim_done
+            self._collapse_btn.setText("\u276e")
+            self._collapse_btn.setToolTip("Collapse sidebar")
+            self.setMinimumWidth(0)
+            self.setMaximumWidth(self.EXPANDED_WIDTH)
+            start_w, end_w = self.COLLAPSED_WIDTH, self.EXPANDED_WIDTH
+
+        self._anim.setStartValue(start_w)
+        self._anim.setEndValue(end_w)
+        self._anim.finished.connect(self._on_anim_done)
+        self._anim.start()
+
+    def _on_anim_done(self) -> None:
+        try:
+            self._anim.finished.disconnect(self._on_anim_done)
+        except TypeError:
+            pass
+        target = self.COLLAPSED_WIDTH if self._collapsed else self.EXPANDED_WIDTH
+        self.setMinimumWidth(target)
+        self.setMaximumWidth(target)
+        if not self._collapsed:
+            # Show labels after expand animation completes
+            self._title_label.show()
+            self._status_container.show()
+            for i, btn in enumerate(self._nav_buttons):
+                icon, label = self.NAV_ITEMS[i]
+                btn.setText(f"  {icon}  {label}")
+
+
+# ─────────────────────────────────────────────
 #  Phase 1 Widget
 # ─────────────────────────────────────────────
 
