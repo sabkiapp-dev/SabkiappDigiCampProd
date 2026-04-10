@@ -135,7 +135,8 @@ API_CREDENTIALS = {
 
 
 BASE_URL = "https://asterisk.sabkiapp.com"
-MACHINE_URL = "http://192.168.8.50"
+GATEWAY_IP = "192.168.8.50"
+MACHINE_URL = f"http://{GATEWAY_IP}"
 
 
 MACHINE_USERNAME    = "admin"

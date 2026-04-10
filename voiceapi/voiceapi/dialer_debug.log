@@ -1,0 +1,19 @@
+2026-03-26 17:57:57,322 - INFO - /root/python_projects/VoiceAPI/voiceapi/api/views/call_status.py changed, reloading.
+2026-03-26 17:58:01,686 - INFO - CHECK TRIGGER: Hour=23, Min=28, Full=2026-03-26 23:28:01.686709
+2026-03-26 17:58:01,687 - WARNING - BLOCKED: Dialer attempt at 23h. Window is 7-22.
+2026-03-26 17:58:01,688 - WARNING - Bad Request: /trigger_dialer
+2026-03-26 17:59:02,083 - INFO - CHECK TRIGGER: Hour=23, Min=29, Full=2026-03-26 23:29:02.083940
+2026-03-26 17:59:02,084 - WARNING - BLOCKED: Dialer attempt at 23h. Window is 7-22.
+2026-03-26 17:59:02,084 - WARNING - Bad Request: /trigger_dialer
+2026-03-26 18:00:01,671 - INFO - CHECK TRIGGER: Hour=23, Min=30, Full=2026-03-26 23:30:01.671792
+2026-03-26 18:00:01,673 - WARNING - BLOCKED: Dialer attempt at 23h. Window is 7-22.
+2026-03-26 18:00:01,675 - WARNING - Bad Request: /trigger_dialer
+2026-03-26 18:01:02,050 - INFO - CHECK TRIGGER: Hour=23, Min=31, Full=2026-03-26 23:31:02.049932
+2026-03-26 18:01:02,050 - WARNING - BLOCKED: Dialer attempt at 23h. Window is 7-22.
+2026-03-26 18:01:02,051 - WARNING - Bad Request: /trigger_dialer
+2026-03-26 18:02:01,459 - INFO - CHECK TRIGGER: Hour=23, Min=32, Full=2026-03-26 23:32:01.459627
+2026-03-26 18:02:01,459 - WARNING - BLOCKED: Dialer attempt at 23h. Window is 7-22.
+2026-03-26 18:02:01,460 - WARNING - Bad Request: /trigger_dialer
+2026-03-26 18:03:01,916 - INFO - CHECK TRIGGER: Hour=23, Min=33, Full=2026-03-26 23:33:01.916834
+2026-03-26 18:03:01,917 - WARNING - BLOCKED: Dialer attempt at 23h. Window is 7-22.
+2026-03-26 18:03:01,917 - WARNING - Bad Request: /trigger_dialer

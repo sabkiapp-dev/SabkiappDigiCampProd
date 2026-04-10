@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+env/
+venv/
+.venv/
+
+# Secrets & credentials
+sabkiapp_google.json
+*.pem
+
+# Binary/data files
+*.pkl
+*.zip
+
+# Logs
+nohup.out
+
+# IDE & tools
+.claude/
+
+# Backups
+voiceapi_local_backup_*/
+
+# SSH keys
+*.pub
+
+# OS
+.DS_Store

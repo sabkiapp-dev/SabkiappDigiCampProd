@@ -35,8 +35,8 @@ class PortData:
         data = voip_client.get_gsminfo()
 
 
-        # if it failed, data will be {}
-        if not data:
+        # if it failed, data will be {} or {"status": "error", "message": "..."}
+        if not data or "status" in data:
             return None, 0
 
         port_data_list = []

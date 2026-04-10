@@ -1,0 +1,5 @@
+extensions.conf -> /etc/asterisk/extensions.conf
+pjsip.conf      -> /etc/asterisk/pjsip.conf
+Assign Permision in /home/pi/Documents
+Make a file in /home/pi/Documents which on run, assigns permissions 
+Truncate exntensions and pjsip files and replace with new files

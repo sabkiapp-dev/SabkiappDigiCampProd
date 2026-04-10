@@ -19,6 +19,7 @@ def generate_voice_female(name, phone_number):
 
     try:
         if not os.path.exists(name_filepath):
+            os.makedirs(name_directory, exist_ok=True)
             tts = gTTS(text=name, lang='en-us')
             tts.save(name_filepath)
             sound = AudioSegment.from_mp3(name_filepath)
@@ -39,11 +40,11 @@ def generate_voice_male(name, phone_number, user_id, host, system_password):
 
     try:
         if not os.path.exists(name_filepath):
-            url = f"{settings.BASE_URL}/get_pronunciation?host={host}&system_password={system_password}&user_id={user_id}&name={name}"  # Use BASE_URL from settings
+            os.makedirs(name_directory, exist_ok=True)
+            url = f"{settings.BASE_URL}/get_pronunciation?host={host}&system_password={system_password}&user_id={user_id}&name={name}"
             response = requests.get(url).json()
             pronunciation_url = response["pronunciation_url"]
 
-            # Download the file from the URL
             with requests.get(pronunciation_url, stream=True) as r:
                 r.raise_for_status()
                 with open(name_filepath, 'wb') as f:
