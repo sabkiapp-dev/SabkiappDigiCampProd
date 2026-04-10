@@ -898,6 +898,127 @@ class SidebarWidget(QFrame):
 
 
 # ─────────────────────────────────────────────
+#  Step Wizard Widget
+# ─────────────────────────────────────────────
+
+class StepWizardWidget(QWidget):
+    """Horizontal step-progress indicator for Phase 2 execution."""
+
+    def __init__(self, total_steps: int = 6, parent=None):
+        super().__init__(parent)
+        self._total = total_steps
+        self._active = -1
+        self._circles: list = []
+        self._lines: list = []
+        self._label_widget = None
+        self._build_ui()
+
+    def _build_ui(self):
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 12, 0, 8)
+        root.setSpacing(6)
+
+        row = QHBoxLayout()
+        row.setSpacing(0)
+        row.setContentsMargins(0, 0, 0, 0)
+
+        for i in range(self._total):
+            circle = QLabel(str(i + 1))
+            circle.setAlignment(Qt.AlignCenter)
+            circle.setFixedSize(30, 30)
+            circle.setStyleSheet(self._style("pending"))
+            row.addWidget(circle)
+            self._circles.append(circle)
+
+            if i < self._total - 1:
+                line = QFrame()
+                line.setFrameShape(QFrame.HLine)
+                line.setFixedHeight(2)
+                line.setStyleSheet("background-color: #30363d; border: none;")
+                row.addWidget(line, 1)
+                self._lines.append(line)
+
+        root.addLayout(row)
+
+        self._label_widget = QLabel("")
+        self._label_widget.setAlignment(Qt.AlignCenter)
+        self._label_widget.setStyleSheet("color: #8b949e; font-size: 12px;")
+        root.addWidget(self._label_widget)
+
+    @staticmethod
+    def _style(state: str) -> str:
+        base = "QLabel { border-radius: 15px; font-size: 12px; font-weight: 600; "
+        if state == "completed":
+            return base + "background-color: #238636; color: #ffffff; }"
+        if state == "active":
+            return base + "background-color: #1f6feb; color: #ffffff; border: 2px solid #58a6ff; }"
+        if state == "failed":
+            return base + "background-color: #da3633; color: #ffffff; }"
+        # pending
+        return base + "background-color: #21262d; color: #8b949e; border: 1px solid #30363d; }"
+
+    # ── Public API ────────────────────────────
+
+    def set_active_step(self, n: int) -> None:
+        """Mark step n (1-based) as active; all prior steps become completed."""
+        self._active = n
+        for i, circle in enumerate(self._circles):
+            sn = i + 1
+            if sn < n:
+                circle.setText("\u2713")
+                circle.setStyleSheet(self._style("completed"))
+                if i < len(self._lines):
+                    self._lines[i].setStyleSheet("background-color: #238636; border: none;")
+            elif sn == n:
+                circle.setText(str(sn))
+                circle.setStyleSheet(self._style("active"))
+            else:
+                circle.setText(str(sn))
+                circle.setStyleSheet(self._style("pending"))
+
+    def set_step_label(self, text: str) -> None:
+        if self._label_widget:
+            self._label_widget.setText(text)
+
+    def mark_all_completed(self) -> None:
+        for i, circle in enumerate(self._circles):
+            circle.setText("\u2713")
+            circle.setStyleSheet(self._style("completed"))
+            if i < len(self._lines):
+                self._lines[i].setStyleSheet("background-color: #238636; border: none;")
+        if self._label_widget:
+            self._label_widget.setStyleSheet("color: #3fb950; font-size: 12px;")
+            self._label_widget.setText("All steps completed successfully")
+
+    def mark_failed(self) -> None:
+        n = self._active
+        for i, circle in enumerate(self._circles):
+            sn = i + 1
+            if sn < n:
+                circle.setText("\u2713")
+                circle.setStyleSheet(self._style("completed"))
+            elif sn == n:
+                circle.setText("\u2717")
+                circle.setStyleSheet(self._style("failed"))
+            else:
+                circle.setText(str(sn))
+                circle.setStyleSheet(self._style("pending"))
+        if self._label_widget:
+            self._label_widget.setStyleSheet("color: #f85149; font-size: 12px;")
+
+    def reset(self) -> None:
+        self._active = -1
+        for i, circle in enumerate(self._circles):
+            circle.setText(str(i + 1))
+            circle.setStyleSheet(self._style("pending"))
+            if i < len(self._lines):
+                self._lines[i].setStyleSheet("background-color: #30363d; border: none;")
+        if self._label_widget:
+            self._label_widget.setStyleSheet("color: #8b949e; font-size: 12px;")
+            self._label_widget.setText("")
+
+
+# ─────────────────────────────────────────────
 #  Phase 1 Widget
 # ─────────────────────────────────────────────
 
