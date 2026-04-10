@@ -15,7 +15,7 @@ from dataclasses import dataclass, asdict, field
 from pathlib import Path
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout, QHBoxLayout,
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QFormLayout, QGroupBox, QLineEdit, QSpinBox, QComboBox, QPlainTextEdit,
     QPushButton, QProgressBar, QLabel, QMessageBox, QFileDialog, QCheckBox,
     QListWidget, QListWidgetItem, QRadioButton, QButtonGroup, QSplitter,
