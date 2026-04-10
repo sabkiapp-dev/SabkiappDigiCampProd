@@ -26,5 +26,8 @@ voiceapi_local_backup_*/
 # SSH keys
 *.pub
 
+# Superpowers brainstorm sessions
+.superpowers/
+
 # OS
 .DS_Store
