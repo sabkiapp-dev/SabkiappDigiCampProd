@@ -1027,6 +1027,8 @@ class StepWizardWidget(QWidget):
 # ─────────────────────────────────────────────
 
 class Phase1Widget(QWidget):
+    flash_completed = pyqtSignal(bool)
+
     def __init__(self, model: ConfigModel, generator: ConfigGenerator, parent=None):
         super().__init__(parent)
         self.model = model
@@ -1037,11 +1039,21 @@ class Phase1Widget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
+        root.setContentsMargins(20, 20, 20, 20)
+        root.setSpacing(12)
+
+        # Page header
+        root.addWidget(make_page_header(
+            "Phase 1 \u2014 SD Card Preparation",
+            "Configure and flash Ubuntu to the SD card for Raspberry Pi"
+        ))
 
         # ── Config Group ──────────────────────────────
-        cfg_group = QGroupBox("Phase 1 Configuration – SD Card Preparation")
+        cfg_group = QGroupBox("SD Card Configuration")
         form = QFormLayout(cfg_group)
         form.setLabelAlignment(Qt.AlignRight)
+        form.setVerticalSpacing(12)
+        form.setHorizontalSpacing(16)
 
         # Device
         dev_layout = QHBoxLayout()
@@ -1050,13 +1062,14 @@ class Phase1Widget(QWidget):
         self.device_combo.setMinimumWidth(160)
         self.detect_btn = QPushButton("Detect")
         self.detect_btn.setFixedWidth(70)
+        self.detect_btn.setToolTip("Scan for USB block devices")
         self.detect_btn.clicked.connect(self._detect_devices)
         dev_layout.addWidget(self.device_combo)
         dev_layout.addWidget(self.detect_btn)
         form.addRow("SD Card Device:", dev_layout)
 
         self.device_path_label = QLabel()
-        self.device_path_label.setStyleSheet("color: #c0392b; font-weight: bold;")
+        self.device_path_label.setStyleSheet("color: #f85149; font-weight: bold;")
         form.addRow("Will flash to:", self.device_path_label)
 
         self.hostname_edit = QLineEdit()
@@ -1092,7 +1105,6 @@ class Phase1Widget(QWidget):
         self.dns_edit.setValidator(make_ip_validator())
         form.addRow("DNS Server:", self.dns_edit)
 
-        # Image path
         img_layout = QHBoxLayout()
         self.image_edit = QLineEdit()
         self.image_edit.setPlaceholderText("Auto-detected from ~/Downloads")
@@ -1103,8 +1115,6 @@ class Phase1Widget(QWidget):
         img_layout.addWidget(img_browse)
         form.addRow("Ubuntu Image:", img_layout)
 
-
-
         root.addWidget(cfg_group)
 
         # ── Buttons ───────────────────────────────────
@@ -1112,8 +1122,7 @@ class Phase1Widget(QWidget):
         self.preview_btn = QPushButton("Preview Generated Script")
         self.preview_btn.clicked.connect(self._emit_preview)
         self.flash_btn = QPushButton("Flash SD Card")
-        self.flash_btn.setStyleSheet("QPushButton { background-color: #c0392b; color: white; font-weight: bold; }"
-                                     "QPushButton:hover { background-color: #e74c3c; }")
+        self.flash_btn.setObjectName("dangerBtn")
         self.flash_btn.clicked.connect(self._flash)
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setEnabled(False)
@@ -1137,7 +1146,6 @@ class Phase1Widget(QWidget):
         self.terminal = make_terminal()
         root.addWidget(self.terminal)
 
-        # Wire change signals
         self._wire_signals()
 
     def _wire_signals(self):
@@ -1269,6 +1277,7 @@ class Phase1Widget(QWidget):
         self.progress.setFormat(f"Step {idx + 1}/8: {label[:40]}")
 
     def _on_finished(self, code: int):
+        self.flash_completed.emit(code == 0)
         self.flash_btn.setEnabled(True)
         self.cancel_btn.setEnabled(False)
         if code == 0:
