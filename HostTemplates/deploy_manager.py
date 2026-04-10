@@ -2022,6 +2022,7 @@ class UtilitiesWidget(QWidget):
         cf_layout.addLayout(cf_btn_layout)
 
         self.cf_terminal = make_terminal()
+        self.cf_terminal.setMinimumHeight(0)
         self.cf_terminal.setMaximumHeight(140)
         cf_layout.addWidget(self.cf_terminal)
         root.addWidget(cf_group)
@@ -2038,6 +2039,7 @@ class UtilitiesWidget(QWidget):
         perm_layout.addLayout(perm_btn_layout)
 
         self.perm_terminal = make_terminal()
+        self.perm_terminal.setMinimumHeight(0)
         self.perm_terminal.setMaximumHeight(140)
         perm_layout.addWidget(self.perm_terminal)
         root.addWidget(perm_group)
@@ -2049,6 +2051,7 @@ class UtilitiesWidget(QWidget):
         scan_btn.clicked.connect(self._scan_devices)
         scan_layout.addWidget(scan_btn)
         self.scan_terminal = make_terminal()
+        self.scan_terminal.setMinimumHeight(0)
         self.scan_terminal.setMaximumHeight(180)
         scan_layout.addWidget(self.scan_terminal)
         root.addWidget(scan_group)
