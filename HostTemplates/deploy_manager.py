@@ -991,6 +991,8 @@ class StepWizardWidget(QWidget):
             self._label_widget.setText("All steps completed successfully")
 
     def mark_failed(self) -> None:
+        if self._active == -1:
+            return
         n = self._active
         for i, circle in enumerate(self._circles):
             sn = i + 1
@@ -1005,6 +1007,8 @@ class StepWizardWidget(QWidget):
                 circle.setStyleSheet(self._style("pending"))
         if self._label_widget:
             self._label_widget.setStyleSheet("color: #f85149; font-size: 12px;")
+            if not self._label_widget.text():
+                self._label_widget.setText("Step failed")
 
     def reset(self) -> None:
         self._active = -1
