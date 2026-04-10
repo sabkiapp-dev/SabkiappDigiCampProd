@@ -23,8 +23,7 @@ from PyQt5.QtWidgets import (
     QInputDialog, QStackedWidget
 )
 from PyQt5.QtCore import QThread, pyqtSignal, Qt, QTimer, QPropertyAnimation, QEasingCurve
-from PyQt5.QtGui import QFont, QColor, QPalette, QTextCursor
-from PyQt5.QtGui import QValidator
+from PyQt5.QtGui import QFont, QColor, QPalette, QTextCursor, QValidator
 
 TEMPLATES_DIR = Path(__file__).parent
 CONFIG_PATH = Path.home() / ".config" / "gsm-gateway-deployer" / "config.json"
@@ -98,7 +97,7 @@ QGroupBox::title {
     font-size: 11px;
     font-weight: 600;
 }
-QLineEdit, QSpinBox, QComboBox {
+QLineEdit, QSpinBox, QComboBox, QPlainTextEdit {
     background-color: #0d1117;
     border: 1px solid #30363d;
     border-radius: 6px;
@@ -107,8 +106,8 @@ QLineEdit, QSpinBox, QComboBox {
     selection-background-color: #264f78;
     min-height: 18px;
 }
-QLineEdit:focus, QSpinBox:focus, QComboBox:focus { border-color: #58a6ff; }
-QLineEdit:disabled, QSpinBox:disabled, QComboBox:disabled {
+QLineEdit:focus, QSpinBox:focus, QComboBox:focus, QPlainTextEdit:focus { border-color: #58a6ff; }
+QLineEdit:disabled, QSpinBox:disabled, QComboBox:disabled, QPlainTextEdit:disabled {
     background-color: #161b22;
     color: #484f58;
     border-color: #21262d;
@@ -259,6 +258,10 @@ def setup_dark_theme(app: QApplication) -> None:
     palette.setColor(QPalette.BrightText,       c("#f0f6fc"))
     palette.setColor(QPalette.Link,             c("#58a6ff"))
     palette.setColor(QPalette.Highlight,        c("#264f78"))
+    palette.setColor(QPalette.Mid,           c("#30363d"))
+    palette.setColor(QPalette.Midlight,      c("#21262d"))
+    palette.setColor(QPalette.Dark,          c("#0d1117"))
+    palette.setColor(QPalette.Shadow,        c("#010409"))
     palette.setColor(QPalette.HighlightedText,  c("#f0f6fc"))
     palette.setColor(QPalette.Disabled, QPalette.Text,       c("#484f58"))
     palette.setColor(QPalette.Disabled, QPalette.ButtonText, c("#484f58"))
