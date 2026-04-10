@@ -1828,8 +1828,8 @@ echo "-> MachineStatus service started on port 9000."
             if step_n:
                 self.step_wizard.set_active_step(step_n)
                 self.step_wizard.set_step_label(line.strip())
-            self.progress.setValue(step_n)
-            self.progress.setFormat(line.strip())
+                self.progress.setValue(step_n)
+                self.progress.setFormat(line.strip())
 
     def _on_finished(self, code: int):
         self.execute_btn.setEnabled(True)
@@ -1843,6 +1843,7 @@ echo "-> MachineStatus service started on port 9000."
         else:
             self.progress.setFormat(f"Failed (exit {code})")
             self.step_wizard.mark_failed()
+            self.step_wizard.hide()
             append_terminal(self.terminal, f"\n[FAILED] Exit code: {code}")
 
     def _download_pubkey(self):
