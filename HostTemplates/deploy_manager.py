@@ -2128,11 +2128,12 @@ class MainWindow(QMainWindow):
         self.model = load_config()
         self.generator = ConfigGenerator(self.model)
         self._build_ui()
-        self.setWindowTitle("32GSM Gateway – Host Deployment Manager")
-        self.resize(900, 720)
+        self.setWindowTitle("GSM Gateway \u00b7 Host Deployment Manager")
+        self.resize(1050, 780)
+        self.setMinimumSize(850, 600)
 
     def _build_ui(self):
-        # Menu
+        # ── Menu ───────────────────────────────────────
         menu = self.menuBar()
         file_menu = menu.addMenu("File")
 
@@ -2152,28 +2153,52 @@ class MainWindow(QMainWindow):
         reset_act.triggered.connect(self._reset_defaults)
         file_menu.addAction(reset_act)
 
-        # Status bar
+        # ── Status bar ─────────────────────────────────
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage(f"Config loaded from {CONFIG_PATH}")
 
-        # Tabs
-        self.tabs = QTabWidget()
-        self.setCentralWidget(self.tabs)
+        # ── Central layout: sidebar + stacked pages ────
+        central = QWidget()
+        self.setCentralWidget(central)
+        main_layout = QHBoxLayout(central)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+
+        # Sidebar
+        self.sidebar = SidebarWidget()
+        self.sidebar.page_changed.connect(self._on_page_changed)
+        main_layout.addWidget(self.sidebar)
+
+        # Stacked pages
+        self.stack = QStackedWidget()
+        main_layout.addWidget(self.stack, 1)
 
         self.phase1_widget = Phase1Widget(self.model, self.generator)
         self.phase2_widget = Phase2Widget(self.model, self.generator)
         self.preview_widget = ConfigPreviewWidget(self.model, self.generator)
         self.utils_widget = UtilitiesWidget(self.model, self.generator)
 
-        self.tabs.addTab(self.phase1_widget, "Phase 1 – SD Card")
-        self.tabs.addTab(self.phase2_widget, "Phase 2 – RPi Setup")
-        self.tabs.addTab(self.preview_widget, "Config Preview")
-        self.tabs.addTab(self.utils_widget, "Utilities")
+        self.stack.addWidget(self.phase1_widget)   # index 0
+        self.stack.addWidget(self.phase2_widget)   # index 1
+        self.stack.addWidget(self.preview_widget)  # index 2
+        self.stack.addWidget(self.utils_widget)    # index 3
 
-        self.tabs.currentChanged.connect(self._on_tab_changed)
+        # Wire status signals to sidebar
+        self.phase1_widget.flash_completed.connect(
+            lambda ok: self.sidebar.update_status(
+                "flash", ok, "Flash: Done" if ok else "Flash: Failed"
+            )
+        )
+        self.phase2_widget.ssh_status_changed.connect(
+            lambda ok: self.sidebar.update_status(
+                "ssh", ok, "SSH: Connected" if ok else "SSH: Failed"
+            )
+        )
 
-    def _on_tab_changed(self, idx: int):
+    def _on_page_changed(self, idx: int):
+        self.stack.setCurrentIndex(idx)
+        self.sidebar.set_active_page(idx)
         if idx == 1:
             self.phase2_widget.refresh_from_model()
         elif idx == 2:
@@ -2182,7 +2207,8 @@ class MainWindow(QMainWindow):
             self.utils_widget.refresh_from_model()
 
     def show_preview(self, key: str):
-        self.tabs.setCurrentIndex(2)
+        self.stack.setCurrentIndex(2)
+        self.sidebar.set_active_page(2)
         self.preview_widget.show_key(key)
 
     def _save_config(self):
