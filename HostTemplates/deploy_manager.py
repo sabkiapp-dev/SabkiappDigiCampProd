@@ -1134,9 +1134,14 @@ class Phase1Widget(QWidget):
         btn_layout.addWidget(self.flash_btn)
         root.addLayout(btn_layout)
 
+        # ── Step Wizard (hidden until flash starts) ──────
+        self.step_wizard = StepWizardWidget(total_steps=7)
+        self.step_wizard.hide()
+        root.addWidget(self.step_wizard)
+
         # ── Progress ──────────────────────────────────
         self.progress = QProgressBar()
-        self.progress.setMaximum(8)
+        self.progress.setMaximum(7)
         self.progress.setValue(0)
         self.progress.setTextVisible(True)
         self.progress.setFormat("Ready")
@@ -1266,6 +1271,8 @@ class Phase1Widget(QWidget):
         self.progress.setFormat("Starting...")
         self.flash_btn.setEnabled(False)
         self.cancel_btn.setEnabled(True)
+        self.step_wizard.reset()
+        self.step_wizard.show()
 
         self.runner = ScriptRunner(["pkexec", "bash", script_path])
         self.runner.output_line.connect(lambda l: append_terminal(self.terminal, l))
@@ -1274,25 +1281,33 @@ class Phase1Widget(QWidget):
         self.runner.start()
 
     def _on_step(self, idx: int, label: str):
-        self.progress.setValue(idx + 1)
-        self.progress.setFormat(f"Step {idx + 1}/8: {label[:40]}")
+        step_n = idx + 1
+        self.step_wizard.set_active_step(step_n)
+        self.step_wizard.set_step_label(f"Step {step_n}/7 \u00b7 {label}")
+        self.progress.setValue(step_n)
+        self.progress.setFormat(f"Step {step_n}/7: {label[:40]}")
 
     def _on_finished(self, code: int):
         self.flash_completed.emit(code == 0)
         self.flash_btn.setEnabled(True)
         self.cancel_btn.setEnabled(False)
         if code == 0:
-            self.progress.setValue(8)
+            self.progress.setValue(7)
             self.progress.setFormat("Done!")
+            self.step_wizard.mark_all_completed()
             append_terminal(self.terminal, "\n[SUCCESS] Phase 1 complete.")
         else:
             self.progress.setFormat(f"Failed (exit {code})")
+            self.step_wizard.mark_failed()
+            self.step_wizard.hide()
             append_terminal(self.terminal, f"\n[FAILED] Exit code: {code}")
 
     def _cancel(self):
         if self.runner:
             self.runner.terminate_process()
         self.cancel_btn.setEnabled(False)
+        self.step_wizard.reset()
+        self.step_wizard.hide()
         append_terminal(self.terminal, "\n[CANCELLED] by user.")
 
 
