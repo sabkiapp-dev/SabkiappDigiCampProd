@@ -1054,6 +1054,7 @@ class Phase1Widget(QWidget):
         form.setLabelAlignment(Qt.AlignRight)
         form.setVerticalSpacing(12)
         form.setHorizontalSpacing(16)
+        form.setContentsMargins(0, 0, 12, 0)
 
         # Device
         dev_layout = QHBoxLayout()
@@ -1334,6 +1335,7 @@ class Phase2Widget(QWidget):
         ssh_form.setLabelAlignment(Qt.AlignRight)
         ssh_form.setVerticalSpacing(12)
         ssh_form.setHorizontalSpacing(16)
+        ssh_form.setContentsMargins(0, 0, 12, 0)
 
         self.ssh_ip_edit = QLineEdit()
         self.ssh_ip_edit.setValidator(make_ip_validator())
@@ -1376,6 +1378,7 @@ class Phase2Widget(QWidget):
         dep_form.setLabelAlignment(Qt.AlignRight)
         dep_form.setVerticalSpacing(12)
         dep_form.setHorizontalSpacing(16)
+        dep_form.setContentsMargins(0, 0, 12, 0)
 
         code_layout = QHBoxLayout()
         self.code_path_edit = QLineEdit()
@@ -1405,6 +1408,7 @@ class Phase2Widget(QWidget):
         gw_form.setLabelAlignment(Qt.AlignRight)
         gw_form.setVerticalSpacing(12)
         gw_form.setHorizontalSpacing(16)
+        gw_form.setContentsMargins(0, 0, 12, 0)
 
         self.gw_ip_edit = QLineEdit()
         self.gw_ip_edit.setValidator(make_ip_validator())
@@ -2009,6 +2013,7 @@ class UtilitiesWidget(QWidget):
         cf_form.setLabelAlignment(Qt.AlignRight)
         cf_form.setVerticalSpacing(12)
         cf_form.setHorizontalSpacing(16)
+        cf_form.setContentsMargins(0, 0, 12, 0)
 
         self.cf_token_util_edit, tok_btn = password_field("Enter Cloudflare token (not saved)")
         tok_layout = QHBoxLayout()
