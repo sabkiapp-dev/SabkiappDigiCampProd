@@ -29,7 +29,7 @@ TEMPLATES_DIR = Path(__file__).parent
 CONFIG_PATH = Path.home() / ".config" / "gsm-gateway-deployer" / "config.json"
 
 PHASE2_STEPS = [
-    "Step 1: Copy MachineStatus from PC via SCP",
+    "Step 1: Copy 32GSMgatewayServer from PC via SCP",
     "Step 2: Install Cloudflare Tunnel",
     "Step 3: Remove token from script for security",
     "Step 4: System update + Install Asterisk",
@@ -82,7 +82,7 @@ QGroupBox {
     border: 1px solid #30363d;
     border-radius: 8px;
     margin-top: 18px;
-    padding: 16px 14px 14px 14px;
+    padding: 16px 2px 10px 2px;
     font-weight: 600;
 }
 QGroupBox::title {
@@ -281,7 +281,7 @@ class ConfigModel:
     hostname: str = "host1"
     user_name: str = "pi"
     user_pass: str = "123"
-    wifi_ssid: str = "BRS_Bhawan_5G"
+    wifi_ssid: str = "BRS_Bhawan_4G"
     wifi_pass: str = "123456789"
     rpi_ip: str = "192.168.1.100"
     rpi_gateway: str = "192.168.8.1"
@@ -467,7 +467,7 @@ wifis:
 
         # CLOUDFLARE_TOKEN: left empty in preview; callers pass cf_token only for in-memory use
 
-        # Remove Step 1 interactive read prompts — MachineStatus is SCP'd before script runs
+        # Remove Step 1 interactive read prompts — 32GSMgatewayServer is SCP'd before script runs
         result = re.sub(
             r'read -p\s*"[^"]*IP[^"]*"\s*HOST_IP',
             f'HOST_IP="localhost"  # SCP handled by deploy_manager',
@@ -480,13 +480,13 @@ wifis:
         )
         result = re.sub(
             r'read -p\s*"[^"]*path[^"]*"\s*HOST_PATH',
-            f'HOST_PATH="/home/{m.user_name}/Documents/MachineStatus"  # already SCP\'d',
+            f'HOST_PATH="/home/{m.user_name}/Documents/32GSMgatewayServer"  # already SCP\'d',
             result
         )
         # Skip the scp command in step 1 — already done before script runs
         result = result.replace(
-            'scp -r "$HOST_USER@$HOST_IP:$HOST_PATH" /home/pi/Documents/MachineStatus',
-            'echo "-> MachineStatus already copied by deploy_manager (skipping scp)"'
+            'scp -r "$HOST_USER@$HOST_IP:$HOST_PATH" /home/pi/Documents/32GSMgatewayServer',
+            'echo "-> 32GSMgatewayServer already copied by deploy_manager (skipping scp)"'
         )
 
         # Replace gateway IP
@@ -1039,7 +1039,7 @@ class Phase1Widget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
-        root.setContentsMargins(20, 20, 20, 20)
+        root.setContentsMargins(16, 16, 8, 16)
         root.setSpacing(12)
 
         # Page header
@@ -1054,7 +1054,7 @@ class Phase1Widget(QWidget):
         form.setLabelAlignment(Qt.AlignRight)
         form.setVerticalSpacing(12)
         form.setHorizontalSpacing(16)
-        form.setContentsMargins(0, 0, 12, 0)
+        form.setContentsMargins(0, 0, 0, 0)
 
         # Device
         dev_layout = QHBoxLayout()
@@ -1065,8 +1065,8 @@ class Phase1Widget(QWidget):
         self.detect_btn.setFixedWidth(70)
         self.detect_btn.setToolTip("Scan for USB block devices")
         self.detect_btn.clicked.connect(self._detect_devices)
-        dev_layout.addWidget(self.device_combo)
-        dev_layout.addWidget(self.detect_btn)
+        dev_layout.addWidget(self.device_combo, 1)
+        dev_layout.addWidget(self.detect_btn, 0)
         form.addRow("SD Card Device:", dev_layout)
 
         self.device_path_label = QLabel()
@@ -1081,8 +1081,8 @@ class Phase1Widget(QWidget):
 
         self.pass_edit, pass_btn = password_field()
         pw_layout = QHBoxLayout()
-        pw_layout.addWidget(self.pass_edit)
-        pw_layout.addWidget(pass_btn)
+        pw_layout.addWidget(self.pass_edit, 1)
+        pw_layout.addWidget(pass_btn, 0)
         form.addRow("Password:", pw_layout)
 
         self.ssid_edit = QLineEdit()
@@ -1090,8 +1090,8 @@ class Phase1Widget(QWidget):
 
         self.wifi_pass_edit, wp_btn = password_field()
         wp_layout = QHBoxLayout()
-        wp_layout.addWidget(self.wifi_pass_edit)
-        wp_layout.addWidget(wp_btn)
+        wp_layout.addWidget(self.wifi_pass_edit, 1)
+        wp_layout.addWidget(wp_btn, 0)
         form.addRow("WiFi Password:", wp_layout)
 
         self.rpi_ip_edit = QLineEdit()
@@ -1112,8 +1112,8 @@ class Phase1Widget(QWidget):
         img_browse = QPushButton("Browse")
         img_browse.setFixedWidth(65)
         img_browse.clicked.connect(self._browse_image)
-        img_layout.addWidget(self.image_edit)
-        img_layout.addWidget(img_browse)
+        img_layout.addWidget(self.image_edit, 1)
+        img_layout.addWidget(img_browse, 0)
         form.addRow("Ubuntu Image:", img_layout)
 
         root.addWidget(cfg_group)
@@ -1328,7 +1328,7 @@ class Phase2Widget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
-        root.setContentsMargins(20, 20, 20, 20)
+        root.setContentsMargins(16, 16, 8, 16)
         root.setSpacing(12)
 
         # Page header
@@ -1350,7 +1350,7 @@ class Phase2Widget(QWidget):
         ssh_form.setLabelAlignment(Qt.AlignRight)
         ssh_form.setVerticalSpacing(12)
         ssh_form.setHorizontalSpacing(16)
-        ssh_form.setContentsMargins(0, 0, 12, 0)
+        ssh_form.setContentsMargins(0, 0, 0, 0)
 
         self.ssh_ip_edit = QLineEdit()
         self.ssh_ip_edit.setValidator(make_ip_validator())
@@ -1367,8 +1367,8 @@ class Phase2Widget(QWidget):
 
         self.ssh_pass_edit, ssh_pbtn = password_field("SSH password (same as Phase 1)")
         sp_layout = QHBoxLayout()
-        sp_layout.addWidget(self.ssh_pass_edit)
-        sp_layout.addWidget(ssh_pbtn)
+        sp_layout.addWidget(self.ssh_pass_edit, 1)
+        sp_layout.addWidget(ssh_pbtn, 0)
         ssh_form.addRow("SSH Password:", sp_layout)
 
         self.hostname_edit = QLineEdit()
@@ -1393,7 +1393,7 @@ class Phase2Widget(QWidget):
         dep_form.setLabelAlignment(Qt.AlignRight)
         dep_form.setVerticalSpacing(12)
         dep_form.setHorizontalSpacing(16)
-        dep_form.setContentsMargins(0, 0, 12, 0)
+        dep_form.setContentsMargins(0, 0, 0, 0)
 
         code_layout = QHBoxLayout()
         self.code_path_edit = QLineEdit()
@@ -1401,8 +1401,8 @@ class Phase2Widget(QWidget):
         code_browse = QPushButton("Browse")
         code_browse.setFixedWidth(65)
         code_browse.clicked.connect(self._browse_code)
-        code_layout.addWidget(self.code_path_edit)
-        code_layout.addWidget(code_browse)
+        code_layout.addWidget(self.code_path_edit, 1)
+        code_layout.addWidget(code_browse, 0)
         dep_form.addRow("Code (.zip):", code_layout)
 
         self.cf_token_edit, cf_show_btn = password_field("Token \u2014 skip if Cloudflare already running")
@@ -1411,8 +1411,8 @@ class Phase2Widget(QWidget):
             "leave this empty and it will be skipped automatically."
         )
         cf_layout = QHBoxLayout()
-        cf_layout.addWidget(self.cf_token_edit)
-        cf_layout.addWidget(cf_show_btn)
+        cf_layout.addWidget(self.cf_token_edit, 1)
+        cf_layout.addWidget(cf_show_btn, 0)
         dep_form.addRow("Cloudflare Token:", cf_layout)
 
         scroll_layout.addWidget(dep_group)
@@ -1423,7 +1423,7 @@ class Phase2Widget(QWidget):
         gw_form.setLabelAlignment(Qt.AlignRight)
         gw_form.setVerticalSpacing(12)
         gw_form.setHorizontalSpacing(16)
-        gw_form.setContentsMargins(0, 0, 12, 0)
+        gw_form.setContentsMargins(0, 0, 0, 0)
 
         self.gw_ip_edit = QLineEdit()
         self.gw_ip_edit.setValidator(make_ip_validator())
@@ -1712,15 +1712,15 @@ echo "-> Asterisk is running."
         step4c = " ".join(sp + ["ssh"] + ssh_opts + [f"{user}@{rpi_ip}",
             '"sudo bash /tmp/asterisk_configure.sh"'])
 
-        # Step 5 – Setup MachineStatus (venv, pip, migrations, systemd)
-        ms_dir = f"{dest_home}/Documents/MachineStatus"
+        # Step 5 – Setup 32GSMgatewayServer (venv, pip, migrations, systemd)
+        ms_dir = f"{dest_home}/Documents/32GSMgatewayServer"
         ms_venv = f"{ms_dir}/ms_env"
-        ms_django = f"{ms_dir}/machine_status"
+        ms_django = f"{ms_dir}/gateway"
 
         # Build the systemd service unit (no sensitive data)
         # run_server.sh has sleep 30 inside, so we background it to avoid blocking systemctl
         ms_service_content = f"""[Unit]
-Description=MachineStatus Server
+Description=32GSMgatewayServer
 After=network.target asterisk.service
 
 [Service]
@@ -1737,23 +1737,23 @@ ExecStop=-/usr/bin/pkill -u {user} -f "python.*manage.py runserver"
 ExecStop=-/usr/bin/pkill -u {user} -f "python.*ami_listener"
 ExecStop=-/usr/bin/pkill -u {user} -f "python.*check_server"
 Environment=PYTHONPATH={ms_dir}:{ms_django}
-Environment=DJANGO_SETTINGS_MODULE=machine_status.settings
+Environment=DJANGO_SETTINGS_MODULE=gsm_gateway.settings
 
 [Install]
 WantedBy=multi-user.target
 """
-        local_ms_service = _tempfile.mktemp(suffix="_machinestatus.service")
+        local_ms_service = _tempfile.mktemp(suffix="_32gsmgateway.service")
         with open(local_ms_service, "w") as fh:
             fh.write(ms_service_content)
 
-        # Build MachineStatus setup script
+        # Build 32GSMgatewayServer setup script
         ms_setup_script = f"""#!/bin/bash
 
 echo "-> Setting GATEWAY_IP to {gateway_ip} in settings.py"
-sed -i 's/^GATEWAY_IP = .*/GATEWAY_IP = "{gateway_ip}"/' {ms_django}/machine_status/settings.py
+sed -i 's/^GATEWAY_IP = .*/GATEWAY_IP = "{gateway_ip}"/' {ms_django}/gsm_gateway/settings.py
 
 echo "-> Setting HOST to {hostname} in settings.py"
-sed -i "s/'HOST': '[^']*'/'HOST': '{hostname}'/" {ms_django}/machine_status/settings.py
+sed -i "s/'HOST': '[^']*'/'HOST': '{hostname}'/" {ms_django}/gsm_gateway/settings.py
 
 echo "-> Installing python3-venv, pip, and ffmpeg if needed"
 sudo apt-get update -qq
@@ -1771,31 +1771,31 @@ pip install -r {ms_dir}/requirements.txt
 
 cd {ms_django}
 export PYTHONPATH={ms_dir}:{ms_django}
-export DJANGO_SETTINGS_MODULE=machine_status.settings
+export DJANGO_SETTINGS_MODULE=gsm_gateway.settings
 
 echo "-> Creating log directory"
 mkdir -p {ms_dir}/logs
 chmod 777 {ms_dir}/logs 2>/dev/null || true
 
-echo "-> Stopping existing MachineStatus processes"
+echo "-> Stopping existing 32GSMgatewayServer processes"
 pkill -f 'manage.py runserver' 2>/dev/null || true
 pkill -f 'ami_listener.py' 2>/dev/null || true
 pkill -f 'check_server.py' 2>/dev/null || true
 sleep 2
 
 echo "-> Installing systemd service"
-sudo cp /tmp/machinestatus_deploy.service /etc/systemd/system/machinestatus.service
+sudo cp /tmp/32gsmgateway_deploy.service /etc/systemd/system/32gsmgateway.service
 sudo systemctl daemon-reload
-sudo systemctl enable machinestatus.service
-sudo systemctl restart --no-block machinestatus.service
+sudo systemctl enable 32gsmgateway.service
+sudo systemctl restart --no-block 32gsmgateway.service
 sleep 3
-echo "-> MachineStatus service started on port 9000."
+echo "-> 32GSMgatewayServer service started on port 9000."
 """
         local_ms_setup = _tempfile.mktemp(suffix="_ms_setup.sh")
         with open(local_ms_setup, "w") as fh:
             fh.write(ms_setup_script)
 
-        step5a_scp_svc   = " ".join(sp + ["scp"] + ssh_opts + [local_ms_service, f"{user}@{rpi_ip}:/tmp/machinestatus_deploy.service"])
+        step5a_scp_svc   = " ".join(sp + ["scp"] + ssh_opts + [local_ms_service, f"{user}@{rpi_ip}:/tmp/32gsmgateway_deploy.service"])
         step5a_scp_setup = " ".join(sp + ["scp"] + ssh_opts + [local_ms_setup,   f"{user}@{rpi_ip}:/tmp/ms_setup.sh"])
         step5b_run       = " ".join(sp + ["ssh"] + ssh_opts + [f"{user}@{rpi_ip}",
             '"bash /tmp/ms_setup.sh"'])
@@ -1822,7 +1822,7 @@ echo "-> MachineStatus service started on port 9000."
                 step4a,
                 step4b_pjsip, step4b_ext, step4b_cfg, step4b_snd,
                 step4c,
-            'echo "[Step 5/6] Setting up MachineStatus server..."',
+            'echo "[Step 5/6] Setting up 32GSMgatewayServer..."',
                 step5a_scp_svc, step5a_scp_setup,
                 step5b_run,
             'echo "[Step 6/6] Generating SSH ed25519 key..."',     step6,
@@ -1915,7 +1915,7 @@ class ConfigPreviewWidget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
-        root.setContentsMargins(20, 20, 20, 20)
+        root.setContentsMargins(16, 16, 8, 16)
         root.setSpacing(12)
 
         root.addWidget(make_page_header(
@@ -2013,7 +2013,7 @@ class UtilitiesWidget(QWidget):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
-        root.setContentsMargins(20, 20, 20, 20)
+        root.setContentsMargins(16, 16, 8, 16)
         root.setSpacing(12)
 
         root.addWidget(make_page_header(
@@ -2028,12 +2028,12 @@ class UtilitiesWidget(QWidget):
         cf_form.setLabelAlignment(Qt.AlignRight)
         cf_form.setVerticalSpacing(12)
         cf_form.setHorizontalSpacing(16)
-        cf_form.setContentsMargins(0, 0, 12, 0)
+        cf_form.setContentsMargins(0, 0, 0, 0)
 
         self.cf_token_util_edit, tok_btn = password_field("Enter Cloudflare token (not saved)")
         tok_layout = QHBoxLayout()
-        tok_layout.addWidget(self.cf_token_util_edit)
-        tok_layout.addWidget(tok_btn)
+        tok_layout.addWidget(self.cf_token_util_edit, 1)
+        tok_layout.addWidget(tok_btn, 0)
         cf_form.addRow("Cloudflare Token:", tok_layout)
         cf_layout.addLayout(cf_form)
 

@@ -5,7 +5,7 @@ DEVICE="/dev/sdd"
 HOSTNAME="host1"
 USER_NAME="pi"
 USER_PASS="123"
-WIFI_SSID="BRS_Bhawan_5G"
+WIFI_SSID="BRS_Bhawan_4G"
 WIFI_PASS="123456789"
 RPI_IP="192.168.1.100"       # Static IP to assign to the RPi
 RPI_GATEWAY="192.168.1.1"    # Your router/gateway IP
@@ -140,6 +140,166 @@ sudo mkdir -p /mnt/rootpart/home/$USER_NAME/Documents
 sudo chown 1000:1000 /mnt/rootpart/home/$USER_NAME/Documents
 
 # setup_asterisk.sh will be delivered via SCP in Phase 2 — not downloaded here
+
+# --- SD Card Longevity Fixes (prevent filesystem corruption) ---
+echo "--- Applying SD card protection ---"
+
+# 1. fstab: safer mount options + tmpfs for /tmp and logs
+sudo tee /mnt/rootpart/etc/fstab > /dev/null <<FSTAB
+LABEL=writable  /               ext4  defaults,noatime,commit=120,errors=continue  0  1
+LABEL=system-boot  /boot/firmware  vfat  defaults  0  1
+tmpfs           /tmp            tmpfs  defaults,nosuid,nodev,size=64M  0  0
+tmpfs           /var/tmp        tmpfs  defaults,nosuid,nodev,size=32M  0  0
+FSTAB
+
+# 2. Disable swap on SD card (swap destroys flash cells)
+sudo tee /mnt/rootpart/etc/sysctl.d/99-sd-protect.conf > /dev/null <<SYSCTL
+# Minimize swap usage — SD cards have limited write cycles
+vm.swappiness=1
+# Reduce dirty page writeback frequency
+vm.dirty_ratio=40
+vm.dirty_background_ratio=5
+vm.dirty_expire_centisecs=6000
+vm.dirty_writeback_centisecs=6000
+SYSCTL
+
+# 3. Limit journal size to prevent log bloat eating SD writes
+sudo mkdir -p /mnt/rootpart/etc/systemd/journald.conf.d
+sudo tee /mnt/rootpart/etc/systemd/journald.conf.d/sd-protect.conf > /dev/null <<JOURNAL
+[Journal]
+SystemMaxUse=30M
+RuntimeMaxUse=20M
+MaxFileSec=1day
+ForwardToSyslog=no
+JOURNAL
+
+# 4. Logrotate: aggressive rotation to keep logs small
+sudo tee /mnt/rootpart/etc/logrotate.d/sd-protect > /dev/null <<LOGROTATE
+/var/log/syslog
+/var/log/kern.log
+/var/log/auth.log
+/var/log/daemon.log
+{
+    rotate 2
+    daily
+    maxsize 5M
+    compress
+    delaycompress
+    missingok
+    notifempty
+    postrotate
+        /usr/lib/rsyslog/rsyslog-rotate
+    endscript
+}
+LOGROTATE
+
+# 5. Disable unnecessary services that hammer the SD card
+# (unattended-upgrades writes large apt caches; fwupd checks firmware constantly)
+sudo ln -sf /dev/null /mnt/rootpart/etc/systemd/system/apt-daily.timer
+sudo ln -sf /dev/null /mnt/rootpart/etc/systemd/system/apt-daily-upgrade.timer
+sudo ln -sf /dev/null /mnt/rootpart/etc/systemd/system/fwupd-refresh.timer
+
+echo "-> SD card protection applied (noatime, tmpfs, swap=1, journal capped, apt-daily disabled)"
+
+# --- Boot Diagnostics (logs WiFi/internet/SSH status on every boot) ---
+echo "--- Injecting boot diagnostics ---"
+sudo tee /mnt/rootpart/usr/local/bin/boot_diag.sh > /dev/null << 'BOOTDIAG'
+#!/bin/bash
+
+LOG="/var/log/boot_diag.log"
+PING_TARGET="8.8.8.8"
+GATEWAY="__RPI_GATEWAY__"
+MAX_WAIT=120
+INTERVAL=5
+
+echo "========================================" >> "$LOG"
+echo "BOOT DIAG — $(date '+%Y-%m-%d %H:%M:%S')" >> "$LOG"
+echo "========================================" >> "$LOG"
+
+elapsed=0
+while [ $elapsed -lt $MAX_WAIT ]; do
+    wlan_state=$(cat /sys/class/net/wlan0/operstate 2>/dev/null)
+    ip_addr=$(ip -4 addr show wlan0 2>/dev/null | grep -oP 'inet \K[\d.]+')
+    echo "[${elapsed}s] wlan0=$wlan_state ip=$ip_addr" >> "$LOG"
+    if [ "$wlan_state" = "up" ] && [ -n "$ip_addr" ]; then
+        echo "[${elapsed}s] WiFi UP with IP $ip_addr" >> "$LOG"
+        break
+    fi
+    sleep $INTERVAL
+    elapsed=$((elapsed + INTERVAL))
+done
+
+if [ $elapsed -ge $MAX_WAIT ]; then
+    echo "FAIL: WiFi did not come up in ${MAX_WAIT}s" >> "$LOG"
+fi
+
+echo "" >> "$LOG"
+echo "--- ip addr ---" >> "$LOG"
+ip addr >> "$LOG" 2>&1
+echo "" >> "$LOG"
+echo "--- ip route ---" >> "$LOG"
+ip route >> "$LOG" 2>&1
+echo "" >> "$LOG"
+echo "--- iw wlan0 link ---" >> "$LOG"
+iw wlan0 link >> "$LOG" 2>&1
+echo "" >> "$LOG"
+echo "--- wpa_cli status ---" >> "$LOG"
+wpa_cli -i wlan0 status >> "$LOG" 2>&1
+
+echo "" >> "$LOG"
+echo "--- ping gateway $GATEWAY ---" >> "$LOG"
+ping -c 3 -W 2 "$GATEWAY" >> "$LOG" 2>&1
+[ $? -eq 0 ] && echo "GATEWAY: OK" >> "$LOG" || echo "GATEWAY: FAIL" >> "$LOG"
+
+echo "" >> "$LOG"
+echo "--- ping internet $PING_TARGET ---" >> "$LOG"
+ping -c 3 -W 2 "$PING_TARGET" >> "$LOG" 2>&1
+[ $? -eq 0 ] && echo "INTERNET: OK" >> "$LOG" || echo "INTERNET: FAIL" >> "$LOG"
+
+echo "" >> "$LOG"
+echo "--- DNS check ---" >> "$LOG"
+nslookup google.com >> "$LOG" 2>&1
+
+echo "" >> "$LOG"
+echo "--- SSH status ---" >> "$LOG"
+systemctl is-active ssh >> "$LOG" 2>&1
+systemctl is-active ssh.socket >> "$LOG" 2>&1
+ss -tlnp | grep ":22" >> "$LOG" 2>&1
+
+echo "" >> "$LOG"
+echo "--- recent kernel errors ---" >> "$LOG"
+dmesg | grep -i -E "error|fail|brcmfmac|wlan|mmc|voltage|throttl" | tail -20 >> "$LOG" 2>&1
+
+echo "" >> "$LOG"
+echo "DIAG COMPLETE — $(date '+%Y-%m-%d %H:%M:%S')" >> "$LOG"
+echo "========================================" >> "$LOG"
+BOOTDIAG
+
+# Replace gateway placeholder with actual value
+sudo sed -i "s|__RPI_GATEWAY__|$RPI_GATEWAY|g" /mnt/rootpart/usr/local/bin/boot_diag.sh
+sudo chmod +x /mnt/rootpart/usr/local/bin/boot_diag.sh
+
+# Systemd service for boot diagnostics
+sudo tee /mnt/rootpart/etc/systemd/system/boot_diag.service > /dev/null <<EOF
+[Unit]
+Description=Boot Diagnostics - WiFi and Internet Check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/boot_diag.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+sudo mkdir -p /mnt/rootpart/etc/systemd/system/multi-user.target.wants
+sudo ln -sf /etc/systemd/system/boot_diag.service /mnt/rootpart/etc/systemd/system/multi-user.target.wants/boot_diag.service
+
+echo "-> Boot diagnostics installed (logs to /var/log/boot_diag.log)"
 
 sudo umount /mnt/rootpart
 sync
