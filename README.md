@@ -1,2 +1,2 @@
 # SabkiappDigiCampProd
-Production repository for SabkiappDigiCampProd - MachineStatus and voiceapi
+Production repository for SabkiappDigiCampProd - 32GSMgatewayServer and DigiCampServer

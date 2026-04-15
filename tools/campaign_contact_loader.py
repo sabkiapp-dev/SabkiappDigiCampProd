@@ -428,7 +428,7 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Add contacts to a VoiceAPI campaign (direct DB)",
+        description="Add contacts to a DigiCampServer campaign (direct DB)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:

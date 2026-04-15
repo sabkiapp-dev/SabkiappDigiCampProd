@@ -21,7 +21,7 @@ nohup.out
 .claude/
 
 # Backups
-voiceapi_local_backup_*/
+digicamp_local_backup_*/
 
 # SSH keys
 *.pub

@@ -36,8 +36,8 @@ echo "================================================="
 # --- 1. FETCH 32GSMGATEWAYSERVER SOURCE FROM LOCAL PC ---
 echo "--- Step 1: Copy 32GSMgatewayServer source from your PC ---"
 echo ""
-read -p "  Enter your PC's IP address           : " HOST_IP
-read -p "  Enter your PC's username             : " HOST_USER
+read -p "  Enter your PC's IP address       : " HOST_IP
+read -p "  Enter your PC's username         : " HOST_USER
 read -p "  Enter full path to 32GSMgatewayServer : " HOST_PATH
 echo ""
 
@@ -198,7 +198,7 @@ systemctl restart asterisk
 
 echo "================================================="
 echo "  SUCCESS!                                        "
-echo "  - 32GSMgatewayServer: copied to ~/Documents      "
+echo "  - 32GSMgatewayServer: copied to ~/Documents          "
 echo "  - Cloudflare Tunnel: running, auto-starts        "
 echo "  - Token: wiped from script                       "
 echo "  - Asterisk: running as 'asterisk' user           "

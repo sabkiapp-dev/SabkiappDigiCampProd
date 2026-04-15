@@ -1,0 +1,21 @@
+  GNU nano 6.2                   /etc/systemd/system/digicamp_server.service                             
+[Unit]
+Description=DigiCampServer Django service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/python_projects/DigiCampServer/digicamp
+Environment="PATH=/root/python_projects/DigiCampServer/env/bin:/usr/local/bin:/usr/bin"
+
+ExecStart=/root/python_projects/DigiCampServer/env/bin/gunicorn \
+    --workers 3 \
+    --bind 0.0.0.0:8081 \
+    digicamp_server.wsgi:application
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

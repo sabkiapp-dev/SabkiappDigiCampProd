@@ -1,0 +1,65 @@
+# =============================================================
+# AI Call Pipeline Configuration
+# =============================================================
+# mode: "sts" (speech-to-speech) or "stt_llm_tts" (pipeline)
+# =============================================================
+
+mode: sts
+
+# --- Default endpoint for origination ---
+endpoint: "Local/s@stasis-test"
+# endpoint: "PJSIP/9876543210@1001"   # real GSM call
+
+# --- ARI connection ---
+ari:
+  host: localhost
+  port: 8088
+  username: ari_user
+  password: ari_pass
+  app: ai-call-app
+
+# --- RTP (ExternalMedia) ---
+rtp:
+  listen_host: 127.0.0.1
+  listen_port: 20000
+  format: slin16
+
+# =============================================================
+# Speech-to-Speech (Mode B) — end-to-end, bypasses STT+LLM+TTS
+# =============================================================
+
+sts:
+  provider: gemini_live     # gemini_live | openai_realtime
+  api_key: ""               # <-- ADD YOUR GEMINI API KEY
+  model: gemini-2.5-flash
+  voice: Aoede              # Gemini voices: Aoede, Charon, Fenrir, Kore, Puck
+  language: hi
+  system_prompt: >
+    You are a helpful Hindi-speaking voice assistant for a survey
+    verification call. Keep responses short, clear, and conversational.
+    Respond in Hindi unless the caller speaks English.
+
+# =============================================================
+# STT → LLM → TTS Pipeline (Mode A)
+# =============================================================
+
+stt:
+  provider: deepgram        # deepgram | google | whisper
+  api_key: ""               # <-- ADD YOUR DEEPGRAM API KEY
+  model: nova-2
+  language: hi
+
+llm:
+  provider: gemini          # gemini | openai | ollama
+  api_key: ""               # <-- ADD YOUR GEMINI API KEY
+  model: gemini-2.5-flash
+  system_prompt: >
+    You are a helpful Hindi-speaking voice assistant for a survey
+    verification call. Keep responses short, clear, and conversational.
+    Respond in Hindi unless the caller speaks English.
+
+tts:
+  provider: elevenlabs      # elevenlabs | google | openai
+  api_key: ""               # <-- ADD YOUR ELEVENLABS API KEY
+  voice_id: "RABOvaPec1ymXz02oDQi"
+  model: eleven_multilingual_v2

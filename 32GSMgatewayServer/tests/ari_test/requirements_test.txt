@@ -1,0 +1,17 @@
+# Core — ARI + RTP
+requests>=2.28
+websocket-client>=1.5
+pyyaml>=6.0
+
+# STT providers
+deepgram-sdk>=3.0
+google-cloud-speech>=2.16
+# faster-whisper>=1.0  # optional — skip on RPi if low RAM
+
+# LLM providers
+google-genai>=1.0
+openai>=1.0
+
+# TTS providers
+elevenlabs>=1.0
+google-cloud-texttospeech>=2.16
