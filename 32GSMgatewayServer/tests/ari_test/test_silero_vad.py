@@ -53,3 +53,22 @@ def test_silero_stream_reset_clears_state():
     stream.process(frame)
     stream.reset()
     assert float(np.abs(stream._state).sum()) == 0.0
+
+
+def test_ulaw_to_16k_frames_yields_correct_sizes():
+    """Feed 10 packets of 160-byte ulaw (20 ms each @ 8 kHz).
+       Should yield frames of 512 PCM samples @ 16 kHz."""
+    acc = silero_vad.UlawTo16kFrames()
+    ulaw_silence = b"\x7f" * 160  # 20 ms of ulaw silence
+    frames = []
+    for _ in range(10):
+        for f in acc.feed(ulaw_silence):
+            frames.append(f)
+
+    # 10 packets × 20 ms = 200 ms of audio. 200 ms @ 16 kHz = 3200 samples.
+    # 3200 / 512 = 6 full frames (rest buffered).
+    assert len(frames) == 6
+    for f in frames:
+        assert f.shape == (512,)
+        assert f.dtype == np.float32
+        assert np.abs(f).max() < 0.01  # silence

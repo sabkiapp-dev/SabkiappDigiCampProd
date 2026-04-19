@@ -76,3 +76,33 @@ class SileroStream:
         )
         self._state = new_state
         return float(prob[0, 0])
+
+
+import audioop
+
+
+class UlawTo16kFrames:
+    """Accepts ulaw @ 8 kHz (arbitrary chunk sizes), yields float32 frames of 512 samples @ 16 kHz."""
+
+    def __init__(self):
+        self._resample_state = None  # audioop.ratecv state
+        self._pcm16_buf = bytearray()
+
+    def reset(self):
+        self._resample_state = None
+        self._pcm16_buf.clear()
+
+    def feed(self, ulaw_chunk: bytes):
+        """Feed any amount of ulaw bytes. Yields 0+ np.float32 arrays of shape (512,)."""
+        pcm8k = audioop.ulaw2lin(ulaw_chunk, 2)
+        pcm16k, self._resample_state = audioop.ratecv(
+            pcm8k, 2, 1, 8000, 16000, self._resample_state
+        )
+        self._pcm16_buf.extend(pcm16k)
+
+        bytes_per_frame = FRAME_SIZE * 2  # 512 samples × int16 = 1024 bytes
+        while len(self._pcm16_buf) >= bytes_per_frame:
+            raw = bytes(self._pcm16_buf[:bytes_per_frame])
+            del self._pcm16_buf[:bytes_per_frame]
+            samples = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768.0
+            yield samples
