@@ -53,6 +53,30 @@ def test_silero_stream_reset_clears_state():
     stream.process(frame)
     stream.reset()
     assert float(np.abs(stream._state).sum()) == 0.0
+    assert float(np.abs(stream._context).sum()) == 0.0
+
+
+def test_silero_stream_detects_real_speech(tmp_path):
+    """Regression: without 64-sample context prepending, model outputs ~0.005 on all input.
+    A real speech WAV must produce many frames with prob > 0.5."""
+    import urllib.request
+    import wave
+
+    wav_path = tmp_path / "en.wav"
+    urllib.request.urlretrieve("https://models.silero.ai/vad_models/en.wav", wav_path)
+
+    with wave.open(str(wav_path), "rb") as w:
+        assert w.getframerate() == 16000
+        samples = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
+
+    stream = silero_vad.SileroStream()
+    probs = []
+    for i in range(0, len(samples) - 512, 512):
+        probs.append(stream.process(samples[i:i + 512]))
+
+    high = sum(1 for p in probs if p > 0.5)
+    assert max(probs) > 0.8, f"max prob too low: {max(probs):.3f} — model wiring likely broken"
+    assert high > len(probs) // 2, f"only {high}/{len(probs)} frames detected as speech"
 
 
 def test_ulaw_to_16k_frames_yields_correct_sizes():

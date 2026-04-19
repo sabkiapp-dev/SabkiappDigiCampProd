@@ -49,32 +49,42 @@ def _get_session():
 
 
 SAMPLE_RATE = 16000
-FRAME_SIZE = 512  # Silero v5 expects 512 samples @ 16kHz (32ms)
+FRAME_SIZE = 512     # Silero v5 expects 512 new samples per frame @ 16kHz (32ms)
+CONTEXT_SIZE = 64    # prepended to each frame — last 64 samples of the prior frame
 
 
 class SileroStream:
-    """Per-call Silero VAD v5 stream. Holds LSTM state between frames."""
+    """Per-call Silero VAD v5 stream. Holds LSTM state + 64-sample context between frames."""
 
     def __init__(self):
         self._session = _get_session()
         self._sr = np.array(SAMPLE_RATE, dtype=np.int64)
         self._state = np.zeros((2, 1, 128), dtype=np.float32)
+        self._context = np.zeros(CONTEXT_SIZE, dtype=np.float32)
 
     def reset(self):
         self._state = np.zeros((2, 1, 128), dtype=np.float32)
+        self._context = np.zeros(CONTEXT_SIZE, dtype=np.float32)
 
     def process(self, frame_float32: np.ndarray) -> float:
-        """Run one 512-sample frame through the model. Returns speech probability."""
+        """Run one 512-sample frame through the model. Returns speech probability.
+
+        The model input is 64 context samples (from the previous frame) + 512 new samples.
+        Context is maintained automatically — caller passes only the 512 new samples.
+        """
         if frame_float32.shape != (FRAME_SIZE,):
             raise ValueError(f"frame must be shape ({FRAME_SIZE},), got {frame_float32.shape}")
         if frame_float32.dtype != np.float32:
             frame_float32 = frame_float32.astype(np.float32)
-        x = frame_float32.reshape(1, FRAME_SIZE)
+        # Prepend context: [ctx(64), frame(512)] = 576 samples total
+        x_with_ctx = np.concatenate([self._context, frame_float32])  # (576,)
+        x = x_with_ctx.reshape(1, CONTEXT_SIZE + FRAME_SIZE)
         prob, new_state = self._session.run(
             None,
             {"input": x, "sr": self._sr, "state": self._state},
         )
         self._state = new_state
+        self._context = x_with_ctx[-CONTEXT_SIZE:].copy()  # last 64 samples → next call
         return float(prob[0, 0])
 
 
