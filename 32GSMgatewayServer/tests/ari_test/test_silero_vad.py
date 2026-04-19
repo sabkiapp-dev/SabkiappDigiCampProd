@@ -1,6 +1,7 @@
 """Unit tests for silero_vad module."""
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 import silero_vad
@@ -27,3 +28,28 @@ def test_model_path_downloads_to_cache_if_missing(tmp_path, monkeypatch):
     p2 = silero_vad.model_path()
     assert p2 == p
     assert Path(p).stat().st_mtime == mtime
+
+
+def test_silero_stream_silence_has_low_prob():
+    stream = silero_vad.SileroStream()
+    silence = np.zeros(512, dtype=np.float32)
+    prob = stream.process(silence)
+    assert 0.0 <= prob <= 1.0
+    assert prob < 0.2, f"silence should have low prob, got {prob}"
+
+
+def test_silero_stream_tone_has_valid_prob():
+    """A 440Hz tone is not speech — prob stays in valid range regardless."""
+    stream = silero_vad.SileroStream()
+    t = np.arange(512, dtype=np.float32) / 16000.0
+    tone = 0.3 * np.sin(2 * np.pi * 440 * t).astype(np.float32)
+    prob = stream.process(tone)
+    assert 0.0 <= prob <= 1.0
+
+
+def test_silero_stream_reset_clears_state():
+    stream = silero_vad.SileroStream()
+    frame = np.random.randn(512).astype(np.float32) * 0.1
+    stream.process(frame)
+    stream.reset()
+    assert float(np.abs(stream._state).sum()) == 0.0
