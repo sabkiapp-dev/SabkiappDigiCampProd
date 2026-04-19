@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VAD Live Monitor</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0f1117; --card:#1a2035; --edge:#1e2d4a; --text:#e2e8f0;
+          --dim:#94a3b8; --green:#22c55e; --amber:#fbbf24; --red:#ef4444; }
+  * { box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  body { background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+  h1 { font-size: 18px; margin: 0 0 14px 0; display: flex; justify-content: space-between; align-items: center; }
+  h1 small { color: var(--dim); font-weight: normal; font-size: 12px; }
+  .row { display: flex; gap: 16px; margin-bottom: 16px; }
+  .card { background: var(--card); border: 1px solid var(--edge); border-radius: 10px; padding: 14px; }
+  #state-card { min-width: 200px; text-align: center; }
+  #state-label { font-size: 13px; color: var(--dim); margin-bottom: 6px; }
+  #state-value { font-size: 28px; font-weight: 700; letter-spacing: 1px; }
+  .state-idle { color: var(--dim); }
+  .state-speaking { color: var(--green); }
+  #info-card { flex: 1; }
+  #info-card .k { color: var(--dim); display: inline-block; min-width: 100px; }
+  #info-card .v { color: var(--text); }
+  #info-card div { margin: 2px 0; font-size: 13px; }
+  .chart-card { background: var(--card); border: 1px solid var(--edge); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; }
+  .chart-card h2 { font-size: 12px; color: var(--dim); margin: 0 0 6px 0; font-weight: 500; }
+  .chart-wrap { height: 140px; position: relative; }
+  #utterance-log { max-height: 220px; overflow-y: auto; }
+  #utterance-log .ent { padding: 5px 2px; border-bottom: 1px solid #121826; font-size: 13px; display: flex; gap: 12px; }
+  #utterance-log .ent .ts { color: var(--dim); width: 80px; }
+  #utterance-log .ent .dur { color: var(--green); }
+  #conn { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+  #conn.up { background: #064e3b; color: var(--green); }
+  #conn.down { background: #450a0a; color: var(--red); }
+</style>
+</head>
+<body>
+  <h1>
+    VAD Live Monitor
+    <small>Pi: <span id="pi-host">—</span> · <span id="conn" class="down">disconnected</span></small>
+  </h1>
+
+  <div class="row">
+    <div class="card" id="state-card">
+      <div id="state-label">STATE</div>
+      <div id="state-value" class="state-idle">IDLE</div>
+    </div>
+    <div class="card" id="info-card">
+      <div><span class="k">Bridge:</span>    <span class="v" id="bridge-state">idle</span></div>
+      <div><span class="k">Call:</span>      <span class="v" id="call-info">—</span></div>
+      <div><span class="k">Duration:</span>  <span class="v" id="duration">00:00</span></div>
+      <div><span class="k">Frames:</span>    <span class="v" id="frames">0</span></div>
+      <div><span class="k">Latency:</span>   <span class="v" id="latency">—</span></div>
+      <div><span class="k">Threshold:</span> <span class="v" id="threshold">0.50</span></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h2>Speech probability (last 10 s)</h2>
+    <div class="chart-wrap"><canvas id="prob-chart"></canvas></div>
+  </div>
+
+  <div class="chart-card">
+    <h2>Max-abs amplitude (last 10 s)</h2>
+    <div class="chart-wrap"><canvas id="amp-chart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:12px;color:var(--dim);margin:0 0 8px 0;">Utterance log (newest first)</h2>
+    <div id="utterance-log"></div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
