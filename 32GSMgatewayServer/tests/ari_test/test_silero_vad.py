@@ -166,3 +166,28 @@ def test_vad_gate_on_metrics_fires_per_frame(monkeypatch):
 
     assert metrics[0]["frame"] == 1
     assert metrics[1]["frame"] == 2
+
+
+def test_vad_gate_last_utterance_ms_populated_after_speech_end(monkeypatch):
+    """After a full speech_start → ... → speech_end cycle,
+    last_utterance_ms() must report a positive duration."""
+    probs = iter([0.9] * 5 + [0.1] * 30)
+
+    def mock_process(self, frame):
+        return next(probs, 0.0)
+
+    monkeypatch.setattr(silero_vad.SileroStream, "process", mock_process)
+
+    gate = silero_vad.VADGate(
+        on_speech_start=lambda: None,
+        on_speech_audio=lambda b: None,
+        on_speech_end=lambda: None,
+    )
+
+    frame = np.zeros(512, dtype=np.float32)
+    for _ in range(35):
+        gate._on_frame(frame, b"\x7f" * 320)
+
+    assert not gate.is_speaking()
+    assert gate.last_utterance_ms() > 0, \
+        f"expected positive utterance duration, got {gate.last_utterance_ms()}"
