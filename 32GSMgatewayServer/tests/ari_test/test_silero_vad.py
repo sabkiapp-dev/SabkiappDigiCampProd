@@ -135,3 +135,34 @@ def test_vad_gate_emits_start_audio_end(monkeypatch):
         push_prob(0.1)
     assert ("end",) in events
     assert not gate.is_speaking()
+
+
+def test_vad_gate_on_metrics_fires_per_frame(monkeypatch):
+    """on_metrics callback must fire exactly once per _on_frame call,
+    with all dashboard keys populated."""
+    metrics = []
+
+    monkeypatch.setattr(silero_vad.SileroStream, "process", lambda self, f: 0.0)
+
+    gate = silero_vad.VADGate(
+        on_speech_start=lambda: None,
+        on_speech_audio=lambda b: None,
+        on_speech_end=lambda: None,
+        on_metrics=metrics.append,
+    )
+
+    frame = np.zeros(512, dtype=np.float32)
+    gate._on_frame(frame, b"\x7f" * 320)
+    gate._on_frame(frame, b"\x7f" * 320)
+
+    assert len(metrics) == 2
+    for m in metrics:
+        assert m["type"] == "frame"
+        assert set(["t", "frame", "prob", "max_abs", "rms",
+                    "latency_ms", "state"]).issubset(m.keys())
+        assert m["state"] in ("idle", "speaking")
+        assert isinstance(m["prob"], float)
+        assert isinstance(m["latency_ms"], float)
+
+    assert metrics[0]["frame"] == 1
+    assert metrics[1]["frame"] == 2

@@ -136,6 +136,9 @@ class VADGate:
       on_speech_start():             called once at utterance onset
       on_speech_audio(ulaw: bytes):  called for each ulaw chunk while SPEAKING
       on_speech_end():               called once at utterance offset
+      on_metrics(event: dict):       optional; fired every frame with
+                                     {type, t, frame, prob, max_abs, rms,
+                                      latency_ms, state}. Must not raise.
     """
 
     def __init__(
@@ -143,10 +146,12 @@ class VADGate:
         on_speech_start: Callable[[], None],
         on_speech_audio: Callable[[bytes], None],
         on_speech_end: Callable[[], None],
+        on_metrics: Callable[[dict], None] | None = None,
     ):
         self._on_start = on_speech_start
         self._on_audio = on_speech_audio
         self._on_end = on_speech_end
+        self._on_metrics = on_metrics
         self._stream = SileroStream()
         self._frames = UlawTo16kFrames()
         self._state = STATE_IDLE
@@ -155,6 +160,9 @@ class VADGate:
         self._speech_frame_count = 0
         # Pending ulaw buffered during ONSET_FRAMES window — flushed on speech_start
         self._pending_ulaw = bytearray()
+        self._frame_count = 0
+        self._utterance_start_t = 0.0
+        self._last_utterance_ms = 0.0
 
     def reset(self):
         """Call at the start of a new call. Resets VAD state + LSTM."""
@@ -165,9 +173,17 @@ class VADGate:
         self._consec_silence = 0
         self._speech_frame_count = 0
         self._pending_ulaw.clear()
+        self._frame_count = 0
+        self._utterance_start_t = 0.0
+        self._last_utterance_ms = 0.0
 
     def is_speaking(self) -> bool:
         return self._state == STATE_SPEAKING
+
+    def last_utterance_ms(self) -> float:
+        """Duration of the most recent completed utterance in milliseconds.
+        Zero if no utterance has completed yet."""
+        return self._last_utterance_ms
 
     def feed(self, ulaw_chunk: bytes):
         """Feed raw ulaw bytes from RTP. Drives the VAD pipeline and callbacks."""
@@ -175,7 +191,12 @@ class VADGate:
             self._on_frame(frame, ulaw_chunk)
 
     def _on_frame(self, frame, ulaw_chunk: bytes):
+        import time as _time
+
+        self._frame_count += 1
+        t0 = _time.monotonic()
         prob = self._stream.process(frame)
+        latency_ms = (_time.monotonic() - t0) * 1000.0
         is_speech = prob >= SPEECH_THRESHOLD
 
         if self._state == STATE_IDLE:
@@ -191,6 +212,7 @@ class VADGate:
                     self._state = STATE_SPEAKING
                     self._speech_frame_count = self._consec_speech
                     self._consec_silence = 0
+                    self._utterance_start_t = _time.monotonic()
                     self._on_start()
                     if self._pending_ulaw:
                         self._on_audio(bytes(self._pending_ulaw))
@@ -206,6 +228,7 @@ class VADGate:
                 self._consec_silence += 1
                 if self._consec_silence >= OFFSET_FRAMES:
                     emitted_end = self._speech_frame_count >= MIN_UTTERANCE_FRAMES
+                    self._last_utterance_ms = (_time.monotonic() - self._utterance_start_t) * 1000.0
                     self._state = STATE_IDLE
                     self._consec_speech = 0
                     self._consec_silence = 0
@@ -213,3 +236,20 @@ class VADGate:
                     self._pending_ulaw.clear()
                     if emitted_end:
                         self._on_end()
+
+        if self._on_metrics is not None:
+            max_abs = float(np.abs(frame).max())
+            rms = float(np.sqrt(np.mean(frame * frame)))
+            try:
+                self._on_metrics({
+                    "type": "frame",
+                    "t": _time.monotonic() * 1000.0,
+                    "frame": self._frame_count,
+                    "prob": float(prob),
+                    "max_abs": max_abs,
+                    "rms": rms,
+                    "latency_ms": latency_ms,
+                    "state": self._state,
+                })
+            except Exception:
+                pass
