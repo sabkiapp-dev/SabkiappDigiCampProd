@@ -22,6 +22,8 @@ import time
 import requests
 import websocket as ws_client
 
+import silero_vad
+
 
 class RTPBridge:
     """UDP socket for ExternalMedia RTP. Forwards ulaw audio via callbacks."""
@@ -352,19 +354,36 @@ def main():
         print("[AI-WS] FAILED to connect to AI server. Is ai_server.py running?")
         sys.exit(1)
 
-    # RTP → AI server forwarding
-    def forward_audio(ulaw_payload):
+    # VAD gate on RPi — only speech-bracketed audio goes to PC
+    def _send_json(obj):
         if ai_ws and ai_connected.is_set():
             try:
-                ai_ws.send(ulaw_payload, opcode=0x2)  # binary
+                ai_ws.send(json.dumps(obj))
             except Exception:
                 pass
+
+    def _send_ulaw(ulaw: bytes):
+        if ai_ws and ai_connected.is_set():
+            try:
+                ai_ws.send(ulaw, opcode=0x2)  # binary
+            except Exception:
+                pass
+
+    vad = silero_vad.VADGate(
+        on_speech_start=lambda: _send_json({"type": "speech_start"}),
+        on_speech_audio=_send_ulaw,
+        on_speech_end=lambda: _send_json({"type": "speech_end"}),
+    )
+
+    def forward_audio(ulaw_payload):
+        vad.feed(ulaw_payload)
 
     rtp.on_audio = forward_audio
     rtp.start()
 
     # ARI callbacks
     def on_call_start(is_incoming, caller):
+        vad.reset()
         if ai_ws:
             ai_ws.send(json.dumps({
                 "type": "call_start",
@@ -375,6 +394,10 @@ def main():
             }))
 
     def on_call_end():
+        # If we're mid-utterance, close the bracket so PC flushes its buffer
+        if vad.is_speaking():
+            _send_json({"type": "speech_end"})
+        vad.reset()
         rtp.flush_queue()  # discard any queued audio for ended call
         if ai_ws:
             ai_ws.send(json.dumps({"type": "call_end"}))
