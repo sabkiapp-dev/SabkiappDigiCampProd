@@ -40,40 +40,20 @@ log = logging.getLogger("AI")
 # ── STT: shared silence-detection mixin ───────────────────────────────────
 
 class _STTBase:
-    """Shared VAD/buffering logic. Subclasses implement _transcribe()."""
+    """Shared buffer for audio bracketed by speech_start / speech_end from RPi."""
+
+    MIN_SPEECH_BYTES = 3200  # ~100 ms of 16-bit PCM @ 16 kHz — smaller = drop
 
     def _init_vad(self):
         self._buffer = bytearray()
-        self._silence_count = 0
-        self._has_speech = False
-        self.SILENCE_THRESHOLD = 800    # RMS threshold (ulaw noise floor ~588, speech >1000)
-        self.SILENCE_FRAMES = 12000     # ~750ms at 16kHz — avoids cutting mid-sentence pauses
-        self.MIN_SPEECH_BYTES = 3200    # ~100ms minimum speech
 
-    def vad(self, pcm_16k: bytes) -> bytes | None:
-        """VAD only — never blocks. Returns captured PCM when speech ends, else None."""
-        samples = struct.unpack(f"<{len(pcm_16k)//2}h", pcm_16k)
-        rms = (sum(s * s for s in samples) / len(samples)) ** 0.5
+    def has_utterance(self) -> bool:
+        return len(self._buffer) >= self.MIN_SPEECH_BYTES
 
-        if rms > self.SILENCE_THRESHOLD:
-            self._has_speech = True
-            self._silence_count = 0
-            self._buffer.extend(pcm_16k)
-        elif self._has_speech:
-            self._silence_count += len(samples)
-            self._buffer.extend(pcm_16k)
-
-            if self._silence_count >= self.SILENCE_FRAMES:
-                if len(self._buffer) >= self.MIN_SPEECH_BYTES:
-                    captured = bytes(self._buffer)
-                    self._buffer.clear()
-                    self._has_speech = False
-                    self._silence_count = 0
-                    return captured
-                self._buffer.clear()
-                self._has_speech = False
-                self._silence_count = 0
-        return None
+    def take_utterance(self) -> bytes:
+        data = bytes(self._buffer)
+        self._buffer.clear()
+        return data
 
 
 # ── STT: faster-whisper (local) ────────────────────────────────────────────
@@ -107,8 +87,7 @@ class WhisperSTT(_STTBase):
             audio,
             language=self.language,
             beam_size=1,
-            vad_filter=True,
-            vad_parameters=dict(min_silence_duration_ms=500),
+            vad_filter=False,
         )
         text = " ".join(seg.text for seg in segments).strip()
         elapsed = time.time() - t0
@@ -695,7 +674,6 @@ async def handle_client(ws, stt, llm, tts):
                     task_prompt = data.get("task_prompt")
                     log.info(f"Call {'incoming from ' + caller if mode == 'incoming' else 'started'}: {data.get('endpoint', '?')}")
                     stt._buffer.clear()
-                    stt._has_speech = False
                     llm._history.clear()
                     user_spoke = False
                     task_opening = None
