@@ -547,127 +547,132 @@ async def handle_client(ws, stt, llm, tts):
     pkt_count = 0
     is_speaking = False      # True while AI TTS audio is being sent
     speaking_until = 0.0     # monotonic deadline — suppress barge-in until here
-    user_spoke = False       # set True the first time VAD fires (caller said something)
+    user_spoke = False       # set True the first time the RPi reports a speech_end
+    stt_resample_state = None  # audioop.ratecv state — persists across binary msgs within an utterance
+
+    async def _start_pipeline(audio_chunk: bytes):
+        nonlocal processing, current_task, stop_event, is_speaking, speaking_until, user_spoke
+        user_spoke = True
+        now = time.monotonic()
+        if is_speaking or now < speaking_until:
+            return  # echo suppression — AI speaking, ignore incoming audio
+        if processing and current_task and stop_event:
+            log.info("Barge-in detected — cancelling pipeline")
+            stop_event.set()
+            current_task.cancel()
+            processing = False
+        if processing or is_speaking or now < speaking_until:
+            return
+        processing = True
+        stop_event = asyncio.Event()
+
+        async def _pipeline(chunk=audio_chunk, se=stop_event):
+            nonlocal processing, is_speaking, speaking_until
+            loop = asyncio.get_event_loop()
+            try:
+                dur = len(chunk) / (16000 * 2)
+                log.info(f"STT: transcribing {dur:.2f}s...")
+                transcript = await loop.run_in_executor(None, stt._transcribe, chunk)
+                if not transcript or se.is_set():
+                    log.info("STT: empty or cancelled")
+                    return
+
+                sentence_q = asyncio.Queue()
+
+                def _stream():
+                    try:
+                        llm.stream_sentences(transcript, sentence_q, loop, se)
+                    except Exception as e:
+                        err = str(e)
+                        if "429" in err or "quota" in err.lower():
+                            asyncio.run_coroutine_threadsafe(
+                                sentence_q.put("माफ करें, अभी सेवा उपलब्ध नहीं है।"), loop)
+                        elif "503" in err:
+                            asyncio.run_coroutine_threadsafe(
+                                sentence_q.put("माफ करें, सेवा व्यस्त है।"), loop)
+                        else:
+                            log.error(f"LLM error: {e}")
+                        asyncio.run_coroutine_threadsafe(sentence_q.put(None), loop)
+
+                loop.run_in_executor(None, _stream)
+
+                is_speaking = True
+                while not se.is_set():
+                    try:
+                        sentence = await asyncio.wait_for(sentence_q.get(), timeout=10.0)
+                    except asyncio.TimeoutError:
+                        log.warning("LLM sentence timeout")
+                        break
+                    if sentence is None:
+                        break
+                    if se.is_set():
+                        break
+
+                    task_complete = "TASK_COMPLETE" in sentence
+                    sentence = sentence.replace("TASK_COMPLETE", "").strip()
+                    m_exec = re.search(r"EXECUTE_TASK:(\d+)", sentence)
+                    execute_task_id = None
+                    if m_exec:
+                        execute_task_id = m_exec.group(1)
+                        sentence = re.sub(r"EXECUTE_TASK:\d+", "", sentence).strip()
+                        log.info(f"[AI] TASK_TRIGGER: task_id={execute_task_id}")
+
+                    if not sentence:
+                        if task_complete:
+                            await ws.send(json.dumps({"type": "hangup"}))
+                        break
+
+                    pcm = await loop.run_in_executor(None, tts.synthesize, sentence)
+                    if pcm and not se.is_set():
+                        pcm_8k_out, _ = audioop.ratecv(pcm, 2, 1, 16000, 8000, None)
+                        ulaw_out = audioop.lin2ulaw(pcm_8k_out, 2)
+                        await ws.send(ulaw_out)
+                        _mon_send(ulaw_out)
+                        audio_secs = len(ulaw_out) / 8000
+                        speaking_until = time.monotonic() + audio_secs + 0.6
+                        log.info(f"Sent {len(ulaw_out)}B for: \"{sentence[:40]}\"")
+
+                    if task_complete and not se.is_set():
+                        await asyncio.sleep(audio_secs + 0.3)
+                        await ws.send(json.dumps({"type": "hangup"}))
+                        break
+
+            except asyncio.CancelledError:
+                pass
+            except Exception as e:
+                log.error(f"Pipeline error: {e}")
+            finally:
+                is_speaking = False
+                processing = False
+
+        current_task = asyncio.create_task(_pipeline())
 
     try:
         async for message in ws:
             if isinstance(message, bytes):
                 _mon_send(message)  # forward incoming ulaw to admin monitor
                 pcm_8k = audioop.ulaw2lin(message, 2)
-                pcm_16k, _ = audioop.ratecv(pcm_8k, 2, 1, 8000, 16000, None)
-
-                # Debug every ~2 seconds
+                pcm_16k, stt_resample_state = audioop.ratecv(pcm_8k, 2, 1, 8000, 16000, stt_resample_state)
+                stt._buffer.extend(pcm_16k)
                 pkt_count += 1
                 if pkt_count % 100 == 1:
-                    samples = struct.unpack(f"<{len(pcm_16k)//2}h", pcm_16k)
-                    rms = (sum(s * s for s in samples) / len(samples)) ** 0.5
-                    log.info(f"Audio: RMS={rms:.0f} has_speech={stt._has_speech} buf={len(stt._buffer)}")
-
-                audio_chunk = stt.vad(pcm_16k)
-                if audio_chunk:
-                    user_spoke = True  # caller said something — suppress task purpose fallback
-                    now = time.monotonic()
-                    if is_speaking or now < speaking_until:
-                        pass  # echo suppression — AI speaking, ignore incoming audio
-                    elif processing and current_task and stop_event:
-                        # Barge-in — user spoke while AI is responding
-                        log.info("Barge-in detected — cancelling pipeline")
-                        stop_event.set()
-                        current_task.cancel()
-                        processing = False
-
-                    if not processing and not is_speaking and now >= speaking_until:
-                        processing = True
-                        stop_event = asyncio.Event()
-
-                        async def _pipeline(chunk=audio_chunk, se=stop_event):
-                            nonlocal processing, is_speaking, speaking_until
-                            loop = asyncio.get_event_loop()
-                            try:
-                                # STT (non-blocking)
-                                dur = len(chunk) / (16000 * 2)
-                                log.info(f"STT: transcribing {dur:.2f}s...")
-                                transcript = await loop.run_in_executor(None, stt._transcribe, chunk)
-                                if not transcript or se.is_set():
-                                    log.info("STT: empty or cancelled")
-                                    return
-
-                                # LLM streaming — sentences arrive via queue
-                                sentence_q = asyncio.Queue()
-
-                                def _stream():
-                                    try:
-                                        llm.stream_sentences(transcript, sentence_q, loop, se)
-                                    except Exception as e:
-                                        err = str(e)
-                                        if "429" in err or "quota" in err.lower():
-                                            asyncio.run_coroutine_threadsafe(
-                                                sentence_q.put("माफ करें, अभी सेवा उपलब्ध नहीं है।"), loop)
-                                        elif "503" in err:
-                                            asyncio.run_coroutine_threadsafe(
-                                                sentence_q.put("माफ करें, सेवा व्यस्त है।"), loop)
-                                        else:
-                                            log.error(f"LLM error: {e}")
-                                        asyncio.run_coroutine_threadsafe(sentence_q.put(None), loop)
-
-                                loop.run_in_executor(None, _stream)
-
-                                # TTS each sentence as it arrives — overlap LLM + TTS
-                                is_speaking = True
-                                while not se.is_set():
-                                    try:
-                                        sentence = await asyncio.wait_for(sentence_q.get(), timeout=10.0)
-                                    except asyncio.TimeoutError:
-                                        log.warning("LLM sentence timeout")
-                                        break
-                                    if sentence is None:
-                                        break
-                                    if se.is_set():
-                                        break
-
-                                    # Strip task control tokens before TTS
-                                    task_complete = "TASK_COMPLETE" in sentence
-                                    sentence = sentence.replace("TASK_COMPLETE", "").strip()
-                                    m_exec = re.search(r"EXECUTE_TASK:(\d+)", sentence)
-                                    execute_task_id = None
-                                    if m_exec:
-                                        execute_task_id = m_exec.group(1)
-                                        sentence = re.sub(r"EXECUTE_TASK:\d+", "", sentence).strip()
-                                        log.info(f"[AI] TASK_TRIGGER: task_id={execute_task_id}")
-
-                                    if not sentence:  # nothing left to speak
-                                        if task_complete:
-                                            await ws.send(json.dumps({"type": "hangup"}))
-                                        break
-
-                                    pcm = await loop.run_in_executor(None, tts.synthesize, sentence)
-                                    if pcm and not se.is_set():
-                                        pcm_8k_out, _ = audioop.ratecv(pcm, 2, 1, 16000, 8000, None)
-                                        ulaw_out = audioop.lin2ulaw(pcm_8k_out, 2)
-                                        await ws.send(ulaw_out)
-                                        _mon_send(ulaw_out)  # forward AI TTS to admin monitor
-                                        audio_secs = len(ulaw_out) / 8000  # ulaw: 8000 B/s
-                                        speaking_until = time.monotonic() + audio_secs + 0.6  # +600ms echo tail
-                                        log.info(f"Sent {len(ulaw_out)}B for: \"{sentence[:40]}\"")
-
-                                    if task_complete and not se.is_set():
-                                        # Wait for last audio to finish playing, then hang up
-                                        await asyncio.sleep(audio_secs + 0.3)
-                                        await ws.send(json.dumps({"type": "hangup"}))
-                                        break
-
-                            except asyncio.CancelledError:
-                                pass
-                            except Exception as e:
-                                log.error(f"Pipeline error: {e}")
-                            finally:
-                                is_speaking = False
-                                processing = False
-
-                        current_task = asyncio.create_task(_pipeline())
+                    log.info(f"Audio bracketed: buf={len(stt._buffer)}")
 
             elif isinstance(message, str):
                 data = json.loads(message)
+                if data.get("type") == "speech_start":
+                    stt_resample_state = None
+                    stt._buffer.clear()
+                    continue
+                if data.get("type") == "speech_end":
+                    if stt.has_utterance():
+                        chunk = stt.take_utterance()
+                        stt_resample_state = None
+                        asyncio.create_task(_start_pipeline(chunk))
+                    else:
+                        stt._buffer.clear()
+                        stt_resample_state = None
+                    continue
                 if data.get("type") == "call_start":
                     mode = data.get("mode", "outbound")
                     caller = data.get("caller", "?")
