@@ -23,6 +23,7 @@ import requests
 import websocket as ws_client
 
 import silero_vad
+from vad_dashboard import Dashboard
 
 
 class RTPBridge:
@@ -369,10 +370,29 @@ def main():
             except Exception:
                 pass
 
+    dash = Dashboard(host="0.0.0.0", port=3003)
+    dash.update_hello(
+        threshold=silero_vad.SPEECH_THRESHOLD,
+        onset_frames=silero_vad.ONSET_FRAMES,
+        offset_frames=silero_vad.OFFSET_FRAMES,
+    )
+    dash.start()
+    print(f"[DASH] http://0.0.0.0:3003/")
+
+    def _on_speech_start():
+        _send_json({"type": "speech_start"})
+        dash.push({"type": "speech_start"})
+
+    def _on_speech_end():
+        _send_json({"type": "speech_end"})
+        dash.push({"type": "speech_end",
+                   "duration_ms": vad.last_utterance_ms()})
+
     vad = silero_vad.VADGate(
-        on_speech_start=lambda: _send_json({"type": "speech_start"}),
+        on_speech_start=_on_speech_start,
         on_speech_audio=_send_ulaw,
-        on_speech_end=lambda: _send_json({"type": "speech_end"}),
+        on_speech_end=_on_speech_end,
+        on_metrics=dash.push,
     )
 
     def forward_audio(ulaw_payload):
@@ -384,6 +404,13 @@ def main():
     # ARI callbacks
     def on_call_start(is_incoming, caller):
         vad.reset()
+        dash.update_hello(bridge_state="in_call")
+        dash.push({
+            "type": "call_start",
+            "mode": "incoming" if is_incoming else "outbound",
+            "endpoint": args.endpoint or "incoming",
+            "caller": caller,
+        })
         if ai_ws:
             ai_ws.send(json.dumps({
                 "type": "call_start",
@@ -398,6 +425,8 @@ def main():
         if vad.is_speaking():
             _send_json({"type": "speech_end"})
         vad.reset()
+        dash.update_hello(bridge_state="idle")
+        dash.push({"type": "call_end"})
         rtp.flush_queue()  # discard any queued audio for ended call
         if ai_ws:
             ai_ws.send(json.dumps({"type": "call_end"}))
