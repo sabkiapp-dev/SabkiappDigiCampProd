@@ -106,3 +106,100 @@ class UlawTo16kFrames:
             del self._pcm16_buf[:bytes_per_frame]
             samples = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768.0
             yield samples
+
+
+from typing import Callable
+
+SPEECH_THRESHOLD = 0.5
+ONSET_FRAMES = 2       # ~64 ms of speech to trigger speech_start
+OFFSET_FRAMES = 25     # ~800 ms of silence to trigger speech_end
+MIN_UTTERANCE_FRAMES = 3  # ~96 ms — discard blips
+
+STATE_IDLE = "idle"
+STATE_SPEAKING = "speaking"
+
+
+class VADGate:
+    """Full pipeline: ulaw bytes → resample → silero → state machine → callbacks.
+
+    Callbacks:
+      on_speech_start():             called once at utterance onset
+      on_speech_audio(ulaw: bytes):  called for each ulaw chunk while SPEAKING
+      on_speech_end():               called once at utterance offset
+    """
+
+    def __init__(
+        self,
+        on_speech_start: Callable[[], None],
+        on_speech_audio: Callable[[bytes], None],
+        on_speech_end: Callable[[], None],
+    ):
+        self._on_start = on_speech_start
+        self._on_audio = on_speech_audio
+        self._on_end = on_speech_end
+        self._stream = SileroStream()
+        self._frames = UlawTo16kFrames()
+        self._state = STATE_IDLE
+        self._consec_speech = 0
+        self._consec_silence = 0
+        self._speech_frame_count = 0
+        # Pending ulaw buffered during ONSET_FRAMES window — flushed on speech_start
+        self._pending_ulaw = bytearray()
+
+    def reset(self):
+        """Call at the start of a new call. Resets VAD state + LSTM."""
+        self._stream.reset()
+        self._frames.reset()
+        self._state = STATE_IDLE
+        self._consec_speech = 0
+        self._consec_silence = 0
+        self._speech_frame_count = 0
+        self._pending_ulaw.clear()
+
+    def is_speaking(self) -> bool:
+        return self._state == STATE_SPEAKING
+
+    def feed(self, ulaw_chunk: bytes):
+        """Feed raw ulaw bytes from RTP. Drives the VAD pipeline and callbacks."""
+        for frame in self._frames.feed(ulaw_chunk):
+            self._on_frame(frame, ulaw_chunk)
+
+    def _on_frame(self, frame, ulaw_chunk: bytes):
+        prob = self._stream.process(frame)
+        is_speech = prob >= SPEECH_THRESHOLD
+
+        if self._state == STATE_IDLE:
+            # Keep a small rolling buffer so the first audio after speech_start isn't lost
+            self._pending_ulaw.extend(ulaw_chunk)
+            # Cap pending buffer at ~200 ms ulaw (8 kHz × 0.2 s = 1600 bytes)
+            if len(self._pending_ulaw) > 1600:
+                del self._pending_ulaw[:-1600]
+
+            if is_speech:
+                self._consec_speech += 1
+                if self._consec_speech >= ONSET_FRAMES:
+                    self._state = STATE_SPEAKING
+                    self._speech_frame_count = self._consec_speech
+                    self._consec_silence = 0
+                    self._on_start()
+                    if self._pending_ulaw:
+                        self._on_audio(bytes(self._pending_ulaw))
+                        self._pending_ulaw.clear()
+            else:
+                self._consec_speech = 0
+        else:  # STATE_SPEAKING
+            self._on_audio(ulaw_chunk)
+            self._speech_frame_count += 1
+            if is_speech:
+                self._consec_silence = 0
+            else:
+                self._consec_silence += 1
+                if self._consec_silence >= OFFSET_FRAMES:
+                    emitted_end = self._speech_frame_count >= MIN_UTTERANCE_FRAMES
+                    self._state = STATE_IDLE
+                    self._consec_speech = 0
+                    self._consec_silence = 0
+                    self._speech_frame_count = 0
+                    self._pending_ulaw.clear()
+                    if emitted_end:
+                        self._on_end()

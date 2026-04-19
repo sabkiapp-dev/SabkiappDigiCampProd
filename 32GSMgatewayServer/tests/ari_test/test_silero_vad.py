@@ -72,3 +72,42 @@ def test_ulaw_to_16k_frames_yields_correct_sizes():
         assert f.shape == (512,)
         assert f.dtype == np.float32
         assert np.abs(f).max() < 0.01  # silence
+
+
+def test_vad_gate_emits_start_audio_end(monkeypatch):
+    """Feed synthetic probabilities via _on_frame directly; assert callback sequence."""
+    events = []
+
+    def mock_process(self, frame):
+        return float(frame[0])  # first sample == desired prob (hack for test)
+
+    monkeypatch.setattr(silero_vad.SileroStream, "process", mock_process)
+
+    gate = silero_vad.VADGate(
+        on_speech_start=lambda: events.append(("start",)),
+        on_speech_audio=lambda b: events.append(("audio", len(b))),
+        on_speech_end=lambda: events.append(("end",)),
+    )
+
+    def push_prob(p, ulaw_bytes=b"\x7f" * 320):
+        frame = np.zeros(512, dtype=np.float32)
+        frame[0] = p
+        gate._on_frame(frame, ulaw_bytes)
+
+    # 2 silence frames → no events
+    push_prob(0.0)
+    push_prob(0.0)
+    assert events == []
+
+    # 2 speech frames → triggers start (ONSET_FRAMES=2)
+    push_prob(0.9)
+    push_prob(0.9)
+    assert ("start",) in events
+    assert any(e[0] == "audio" for e in events)
+    assert gate.is_speaking()
+
+    # 25 silence frames → triggers end (OFFSET_FRAMES=25)
+    for _ in range(25):
+        push_prob(0.1)
+    assert ("end",) in events
+    assert not gate.is_speaking()
