@@ -7,6 +7,9 @@ pyyaml>=6.0
 onnxruntime>=1.17
 numpy>=1.24
 
+# Dashboard — WebSocket + HTTP on Pi, port 3003
+websockets>=12.0
+
 # STT providers
 deepgram-sdk>=3.0
 google-cloud-speech>=2.16
