@@ -29,6 +29,37 @@ import time
 import wave
 from pathlib import Path
 
+# YAMNet audio event classifier (Google AudioSet, 521 classes) — optional,
+# loaded lazily so ai_server still boots if the model isn't present.
+try:
+    import yamnet_classify as _yamnet
+    _YAMNET_AVAILABLE = True
+except Exception as _e:
+    _YAMNET_AVAILABLE = False
+    _yamnet = None
+    logging.getLogger("AI").warning(f"yamnet_classify not available: {_e}")
+
+
+def _classify_and_send(ws, loop, pcm16_16k: bytes, label: str) -> None:
+    """Run YAMNet in the executor and send a category event over the WS.
+    pcm16_16k: raw 16 kHz mono int16 PCM bytes. Non-blocking wrt the caller."""
+    if not _YAMNET_AVAILABLE or not pcm16_16k:
+        return
+    def _run():
+        return _yamnet.classify_pcm16_bytes_safe(pcm16_16k, top_k=3)
+    async def _dispatch():
+        try:
+            classes = await loop.run_in_executor(None, _run)
+            if classes:
+                await ws.send(json.dumps({
+                    "type": "category",
+                    "label": label,
+                    "classes": [{"name": n, "score": s} for n, s in classes],
+                }))
+        except Exception:
+            pass
+    loop.create_task(_dispatch())
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(name)s] %(message)s",
@@ -573,6 +604,17 @@ async def handle_client(ws, stt, llm, tts):
                 dur = len(chunk) / (16000 * 2)
                 log.info(f"STT: transcribing {dur:.2f}s...")
                 transcript = await loop.run_in_executor(None, stt._transcribe, chunk)
+                # Always emit a transcript event (even when empty) so the
+                # dashboard can fill the pending row instead of hanging.
+                try:
+                    await ws.send(json.dumps({"type": "transcript",
+                                              "label": "main",
+                                              "text": transcript or "",
+                                              "duration_ms": int(len(chunk) / 32)}))
+                except Exception:
+                    pass
+                # Also run YAMNet classification on the same chunk.
+                _classify_and_send(ws, loop, chunk, "main")
                 if not transcript or se.is_set():
                     log.info("STT: empty or cancelled")
                     return
@@ -672,6 +714,43 @@ async def handle_client(ws, stt, llm, tts):
                     else:
                         stt._buffer.clear()
                         stt_resample_state = None
+                    continue
+                # STT-only path: run transcription and emit a labeled transcript.
+                # No LLM / TTS. Used by the bridge to get dual filtered/raw
+                # transcriptions in parallel for VAD calibration comparison.
+                if data.get("type") == "stt_start":
+                    stt_resample_state = None
+                    stt._buffer.clear()
+                    continue
+                if data.get("type") == "stt_end":
+                    _label = data.get("label", "unlabeled")
+                    if stt.has_utterance():
+                        _chunk = stt.take_utterance()
+                        stt_resample_state = None
+
+                        async def _stt_only(c=_chunk, lbl=_label):
+                            loop = asyncio.get_event_loop()
+                            t = await loop.run_in_executor(None, stt._transcribe, c)
+                            try:
+                                await ws.send(json.dumps({
+                                    "type": "transcript", "label": lbl,
+                                    "text": t or "", "duration_ms": int(len(c) / 32),
+                                }))
+                            except Exception:
+                                pass
+                            # YAMNet classification — parallel to STT.
+                            _classify_and_send(ws, loop, c, lbl)
+                        asyncio.create_task(_stt_only())
+                    else:
+                        stt._buffer.clear()
+                        stt_resample_state = None
+                        try:
+                            await ws.send(json.dumps({
+                                "type": "transcript", "label": _label,
+                                "text": "", "duration_ms": 0,
+                            }))
+                        except Exception:
+                            pass
                     continue
                 if data.get("type") == "call_start":
                     mode = data.get("mode", "outbound")

@@ -13,22 +13,51 @@
   h1 small { color: var(--dim); font-weight: normal; font-size: 12px; }
   .row { display: flex; gap: 16px; margin-bottom: 16px; }
   .card { background: var(--card); border: 1px solid var(--edge); border-radius: 10px; padding: 14px; }
-  #state-card { min-width: 200px; text-align: center; }
+  #state-card { min-width: 240px; text-align: center;
+                transition: background 0.15s, border-color 0.15s, box-shadow 0.15s; }
   #state-label { font-size: 13px; color: var(--dim); margin-bottom: 6px; }
-  #state-value { font-size: 28px; font-weight: 700; letter-spacing: 1px; }
+  #state-value { font-size: 44px; font-weight: 800; letter-spacing: 2px; line-height: 1; }
   .state-idle { color: var(--dim); }
-  .state-speaking { color: var(--green); }
+  .state-speaking { color: #ffffff; }
+  .state-card-speaking { background: #0a3318 !important; border-color: var(--green) !important;
+                         box-shadow: 0 0 24px rgba(34, 197, 94, 0.35);
+                         animation: pulse-green 1.2s ease-in-out infinite; }
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 24px rgba(34, 197, 94, 0.35); }
+    50%      { box-shadow: 0 0 40px rgba(34, 197, 94, 0.75); }
+  }
   #info-card { flex: 1; }
   #info-card .k { color: var(--dim); display: inline-block; min-width: 100px; }
   #info-card .v { color: var(--text); }
   #info-card div { margin: 2px 0; font-size: 13px; }
+  #controls { display: flex; gap: 18px; flex-wrap: wrap; }
+  #controls .sl { display: flex; flex-direction: column; gap: 3px; min-width: 170px; }
+  #controls .sl label { font-size: 11px; color: var(--dim); display: flex; justify-content: space-between; }
+  #controls .sl label .v { color: var(--text); font-variant-numeric: tabular-nums; }
+  #controls input[type="range"] { width: 100%; accent-color: #60a5fa; }
+  #speaking-timer { font-size: 12px; margin-top: 6px; color: var(--green); font-variant-numeric: tabular-nums; min-height: 14px; }
+  .src-btn { background: #111827; color: var(--text); border: 1px solid var(--edge);
+             border-radius: 8px; padding: 8px 14px; font-size: 13px; cursor: pointer;
+             transition: background 0.1s, border-color 0.1s, color 0.1s; }
+  .src-btn:hover { background: #1a2035; }
+  .src-btn.src-active { background: #0a3318; border-color: var(--green); color: var(--green); font-weight: 600; }
   .chart-card { background: var(--card); border: 1px solid var(--edge); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; }
   .chart-card h2 { font-size: 12px; color: var(--dim); margin: 0 0 6px 0; font-weight: 500; }
   .chart-wrap { height: 140px; position: relative; }
-  #utterance-log { max-height: 220px; overflow-y: auto; }
-  #utterance-log .ent { padding: 5px 2px; border-bottom: 1px solid #121826; font-size: 13px; display: flex; gap: 12px; }
-  #utterance-log .ent .ts { color: var(--dim); width: 80px; }
-  #utterance-log .ent .dur { color: var(--green); }
+  #utterance-log { max-height: 380px; overflow-y: auto; }
+  #utterance-log .ent { padding: 8px 2px; border-bottom: 1px solid #121826; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+  #utterance-log .ent .ts   { color: var(--dim); width: 80px; flex-shrink: 0; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  #utterance-log .ent .dur  { color: var(--green); width: 60px; flex-shrink: 0; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  #utterance-log .ent .text-wrap { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  #utterance-log .ent .slot { display: flex; gap: 8px; align-items: baseline; }
+  #utterance-log .ent .role { flex-shrink: 0; width: 64px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; text-align: center; }
+  #utterance-log .ent .role-filtered { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+  #utterance-log .ent .role-raw      { background: rgba(251, 191, 36, 0.18); color: #fbbf24; }
+  #utterance-log .ent .text { color: var(--text); flex: 1; }
+  #utterance-log .ent .text.pending { color: var(--dim); font-style: italic; }
+  #utterance-log .ent .word { display: inline-block; margin: 2px 4px 2px 0; padding: 2px 8px; background: #1e2d4a; border-radius: 6px; }
+  #utterance-log .ent .cat { padding-left: 72px; margin-top: 2px; display: flex; flex-wrap: wrap; gap: 5px; }
+  #utterance-log .ent .cat .tag { display: inline-block; padding: 1px 7px; font-size: 11px; background: rgba(168, 85, 247, 0.18); color: #c084fc; border-radius: 10px; font-variant-numeric: tabular-nums; }
   #conn { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
   #conn.up { background: #064e3b; color: var(--green); }
   #conn.down { background: #450a0a; color: var(--red); }
@@ -44,6 +73,7 @@
     <div class="card" id="state-card">
       <div id="state-label">STATE</div>
       <div id="state-value" class="state-idle">IDLE</div>
+      <div id="speaking-timer">&nbsp;</div>
     </div>
     <div class="card" id="info-card">
       <div><span class="k">Bridge:</span>    <span class="v" id="bridge-state">idle</span></div>
@@ -52,6 +82,62 @@
       <div><span class="k">Frames:</span>    <span class="v" id="frames">0</span></div>
       <div><span class="k">Latency:</span>   <span class="v" id="latency">—</span></div>
       <div><span class="k">Threshold:</span> <span class="v" id="threshold">0.50</span></div>
+      <div id="last-speech" style="margin-top:6px;border-top:1px solid var(--edge);padding-top:6px;">
+        <span class="k">Last speech:</span> <span class="v">—</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h2 style="font-size:12px;color:var(--dim);margin:0 0 10px 0;">Audio source</h2>
+    <div id="source-controls" style="display:flex;gap:10px;">
+      <button id="src-asterisk" class="src-btn src-active">Asterisk RTP (call)</button>
+      <button id="src-mic"      class="src-btn">USB Mic (calibration)</button>
+      <span id="src-status" style="align-self:center;color:var(--dim);font-size:12px;"></span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h2 style="font-size:12px;color:var(--dim);margin:0 0 10px 0;">Audio output (what the phone hears)</h2>
+    <div id="output-controls" style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="out-tts"  class="src-btn src-active">TTS (AI reply)</button>
+      <button id="out-echo" class="src-btn">Echo (VAD-filtered)</button>
+      <button id="out-raw"  class="src-btn">Raw (unfiltered audio)</button>
+      <span id="out-status" style="align-self:center;color:var(--dim);font-size:12px;"></span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h2 style="font-size:12px;color:var(--dim);margin:0 0 10px 0;">Tune parameters (live)</h2>
+    <div id="controls">
+      <div class="sl">
+        <label>prob threshold <span class="v" id="l-threshold">0.20</span></label>
+        <input type="range" id="s-threshold" min="0" max="1" step="0.01" value="0.2">
+      </div>
+      <div class="sl">
+        <label>amplitude threshold <span class="v" id="l-amp">0.084</span></label>
+        <input type="range" id="s-amp" min="0" max="0.25" step="0.002" value="0.084">
+      </div>
+      <div class="sl">
+        <label>amp hold frames <span class="v" id="l-amphold">10</span></label>
+        <input type="range" id="s-amphold" min="1" max="100" step="1" value="10">
+      </div>
+      <div class="sl">
+        <label>onset frames <span class="v" id="l-onset">2</span></label>
+        <input type="range" id="s-onset" min="1" max="10" step="1" value="2">
+      </div>
+      <div class="sl">
+        <label>offset frames <span class="v" id="l-offset">10</span></label>
+        <input type="range" id="s-offset" min="3" max="60" step="1" value="10">
+      </div>
+      <div class="sl">
+        <label>min utterance frames <span class="v" id="l-minutt">3</span></label>
+        <input type="range" id="s-minutt" min="1" max="20" step="1" value="3">
+      </div>
+      <div class="sl">
+        <label>pre-roll frames <span class="v" id="l-preroll">5</span></label>
+        <input type="range" id="s-preroll" min="0" max="20" step="1" value="5">
+      </div>
     </div>
   </div>
 
@@ -65,8 +151,13 @@
     <div class="chart-wrap"><canvas id="amp-chart"></canvas></div>
   </div>
 
+  <div class="chart-card">
+    <h2>Is-speech (VAD decision: 1 = speech, 0 = silence)</h2>
+    <div class="chart-wrap"><canvas id="speech-chart"></canvas></div>
+  </div>
+
   <div class="card">
-    <h2 style="font-size:12px;color:var(--dim);margin:0 0 8px 0;">Utterance log (newest first)</h2>
+    <h2 style="font-size:12px;color:var(--dim);margin:0 0 8px 0;">Utterance log + transcripts (newest first)</h2>
     <div id="utterance-log"></div>
   </div>
 

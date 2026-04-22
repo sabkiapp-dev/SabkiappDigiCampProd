@@ -30,7 +30,8 @@ class Dashboard:
 
     def __init__(self, host: str = "0.0.0.0", port: int = 3003,
                  queue_max: int = 500,
-                 static_dir: Optional[Path] = None):
+                 static_dir: Optional[Path] = None,
+                 on_client_message=None):
         self._host = host
         self._port = port
         self._queue: queue.Queue[dict] = queue.Queue(maxsize=queue_max)
@@ -40,6 +41,9 @@ class Dashboard:
         self._clients: Set = set()
         self._static_dir = static_dir or (Path(__file__).parent / "dashboard")
         self._hello = dict(HELLO_DEFAULTS)
+        # Called with JSON dicts from the browser (e.g. {type:"set_param",...}).
+        # Runs on the dashboard asyncio thread — must not block.
+        self._on_client_message = on_client_message
 
     def push(self, event: dict) -> None:
         if not isinstance(event, dict):
@@ -84,14 +88,24 @@ class Dashboard:
         import websockets
 
         async def handler(ws):
-            # websockets >=10: handler(ws); path is on ws.path or ws.request.path
             self._clients.add(ws)
             try:
                 hello = dict(self._hello)
                 hello["t"] = _now_ms()
                 await ws.send(json.dumps(hello))
-                async for _ in ws:
-                    pass
+                async for raw in ws:
+                    if self._on_client_message is None:
+                        continue
+                    try:
+                        msg = json.loads(raw)
+                    except Exception:
+                        continue
+                    if not isinstance(msg, dict):
+                        continue
+                    try:
+                        self._on_client_message(msg)
+                    except Exception as e:
+                        log.warning(f"[DASH] on_client_message error: {e}")
             finally:
                 self._clients.discard(ws)
 
@@ -159,13 +173,17 @@ class Dashboard:
     async def _serve_static_new(self, path: str):
         """websockets 12+ process_request — return a Response or None."""
         from websockets.http11 import Response
+        from websockets.datastructures import Headers
         data = self._dispatch_static(path)
         if data is None:
             return None
         status, content_type, body = data
-        return Response(status, b"OK" if status == 200 else b"Not Found",
-                        [("Content-Type", content_type),
-                         ("Cache-Control", "no-store")], body)
+        reason = "OK" if status == 200 else ("Not Found" if status == 404 else "Error")
+        headers = Headers()
+        headers["Content-Type"] = content_type
+        headers["Cache-Control"] = "no-store"
+        headers["Content-Length"] = str(len(body))
+        return Response(status, reason, headers, body)
 
     async def _serve_static_legacy(self, path: str):
         """Older websockets — return (status, headers, body) tuple or None."""

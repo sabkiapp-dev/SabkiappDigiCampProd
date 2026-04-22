@@ -5,7 +5,7 @@ Replaces the entire dialplan IVR with pure Python + ARI REST/WebSocket.
 
 Usage:
     python3 test_02_ivr.py                                          # Local channel test
-    python3 test_02_ivr.py --endpoint "PJSIP/8757839258@1017"       # Real GSM call
+    python3 test_02_ivr.py --endpoint "PJSIP/9971389164@1017"       # Real GSM call
     python3 test_02_ivr.py --endpoint "PJSIP/NUM@1017" --intro "sound:/var/lib/asterisk/sounds/hi/static/01_Namskar"
 """
 
@@ -342,7 +342,7 @@ def main():
 
     # Call target
     parser.add_argument("--endpoint", default="Local/s@stasis-test",
-                        help="SIP endpoint (e.g. PJSIP/8757839258@1017)")
+                        help="SIP endpoint (e.g. PJSIP/9971389164@1017)")
 
     # Audio clips (Asterisk built-in sounds as defaults)
     parser.add_argument("--intro", default="sound:hello-world",

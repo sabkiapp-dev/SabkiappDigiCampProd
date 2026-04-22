@@ -16,7 +16,7 @@ Audio conversion:
   Gemini → PCM16(24kHz) → resample(8kHz) → ulaw(8kHz) → Caller
 
 Usage:
-  python3 test_04_gemini_live.py --endpoint "PJSIP/8757839258@1017"
+  python3 test_04_gemini_live.py --endpoint "PJSIP/9971389164@1017"
   python3 test_04_gemini_live.py --endpoint "PJSIP/NUM@1017" --language hi
 """
 
@@ -305,7 +305,7 @@ class ARICallHandler:
 
 def main():
     parser = argparse.ArgumentParser(description="Gemini Live AI Call")
-    parser.add_argument("--endpoint", required=True, help="e.g. PJSIP/8757839258@1017")
+    parser.add_argument("--endpoint", required=True, help="e.g. PJSIP/9971389164@1017")
     parser.add_argument("--api-key", default="AIzaSyDxQ4yME9ChXywqmm-6qry_W5RcjhANmnM")
     parser.add_argument("--model", default="gemini-2.5-flash-native-audio-latest")
     parser.add_argument("--voice", default="Kore", help="Gemini voice: Puck, Charon, Kore, Fenrir, Aoede")
